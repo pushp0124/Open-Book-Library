@@ -1,0 +1,93 @@
+package com.capgemini.bookStore.util;
+
+import java.util.Optional;
+
+import com.capgemini.bookStore.bean.Book;
+import com.capgemini.bookStore.bean.BookAuthor;
+import com.capgemini.bookStore.bean.BookCategory;
+import com.capgemini.bookStore.bean.BookPublisher;
+import com.capgemini.bookStore.bean.Credential;
+import com.capgemini.bookStore.bean.IssueBook;
+import com.capgemini.bookStore.bean.User;
+import com.capgemini.bookStore.dao.BookAuthorDao;
+import com.capgemini.bookStore.dao.BookCategoryDao;
+import com.capgemini.bookStore.dao.BookDao;
+import com.capgemini.bookStore.dao.BookPublisherDao;
+import com.capgemini.bookStore.dao.CredentialDao;
+import com.capgemini.bookStore.dao.IssueBookDao;
+import com.capgemini.bookStore.dao.UserDao;
+import com.capgemini.bookStore.exception.CapgBookStoreException;
+
+public class Utility {
+
+public static final Utility utilityObject = new Utility();
+	
+	public static final String dateTimeFormatter = "yyyy-MM-dd";
+
+	public User getUserFromUserId(Integer userId, UserDao userRepo) throws CapgBookStoreException {
+		Optional<User> optionalUserObj = userRepo.findById(userId);
+		if(optionalUserObj.isEmpty()) {
+			throw new CapgBookStoreException("Account with UserId " + userId + " doesn't exist for User");
+		} 
+		return optionalUserObj.get();
+	}
+	
+	public User getUserFromMailId(String mailId, UserDao userRepo) throws CapgBookStoreException {
+		Optional<User> optionalUserObj = userRepo.findByMailId(mailId);
+		if(optionalUserObj.isEmpty()) {
+			throw new CapgBookStoreException("Account with mail Id " + mailId + " doesn't exist for User");
+		} 
+		return optionalUserObj.get();
+	}
+
+	public Credential getCredentialFromMailId(String mailId, CredentialDao credentialRepo) throws CapgBookStoreException {
+		Optional<Credential> optionalCredentialObj = credentialRepo.findByMailId(mailId);
+		if(optionalCredentialObj.isEmpty()) {
+			throw new CapgBookStoreException("Account with" + mailId + " doesn't exist for User");
+		} 
+		return optionalCredentialObj.get();
+	}
+
+	public BookCategory getCategoryFromCategoryId(Integer categoryId, BookCategoryDao categoryRepo) throws CapgBookStoreException {
+		Optional<BookCategory> optionalCategory = categoryRepo.findById(categoryId);
+		if(optionalCategory.isEmpty()) {
+			throw new CapgBookStoreException("Book Category with Category Id " +  categoryId + " doesn't exist");
+		}
+		return optionalCategory.get();
+	}
+	
+	public BookAuthor getAuthorFromAuthorId(Integer authorId, BookAuthorDao authorRepo) throws CapgBookStoreException {
+		Optional<BookAuthor> optionalAuthor = authorRepo.findById(authorId);
+		if(optionalAuthor.isEmpty()) {
+			throw new CapgBookStoreException("Author with Author Id " +  authorId + " doesn't exist");
+		}
+		return optionalAuthor.get();
+	}
+
+	public BookPublisher getPublisherFromPublisherId(Integer publisherId, BookPublisherDao publisherRepo) throws CapgBookStoreException {
+		Optional<BookPublisher> optionalPublisher = publisherRepo.findById(publisherId);
+		if(optionalPublisher.isEmpty()) {
+			throw new CapgBookStoreException("Publisher with PublisherId " +  publisherId + " doesn't exist");
+		}
+		return optionalPublisher.get();
+	}
+	
+	public Book getBookFromBookId(Integer bookId, BookDao bookRepo) throws CapgBookStoreException {
+		Optional<Book> optionalBook = bookRepo.findById(bookId);
+		if(optionalBook.isEmpty()) {
+			throw new CapgBookStoreException("Book with BookId " +  bookId + " doesn't exist");
+		}
+
+		return optionalBook.get();
+	}
+
+	public IssueBook getIssueBookFromIssueId(Integer issueId, IssueBookDao issueBookRepo) throws CapgBookStoreException {
+
+		Optional<IssueBook> optionalIssue = issueBookRepo.findById(issueId);
+		if(optionalIssue.isEmpty()) {
+			throw new CapgBookStoreException("Book with issueId " +  issueId + " is not issued");
+		}
+		return optionalIssue.get();
+	}
+
+}

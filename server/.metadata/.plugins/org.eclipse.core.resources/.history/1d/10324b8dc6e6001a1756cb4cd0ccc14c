@@ -1,0 +1,14 @@
+package com.obl.demo.exception;
+
+public class CapgBookStoreException extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
+	public CapgBookStoreException() {
+		super();
+	}
+
+	public CapgBookStoreException(String message) {
+		super(message);
+	}
+}

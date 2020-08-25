@@ -1,0 +1,5 @@
+package com.obl.demo.service;
+
+public interface OpenBookLibraryAdminService {
+
+}

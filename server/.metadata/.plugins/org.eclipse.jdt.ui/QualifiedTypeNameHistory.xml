@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.obl.demo.bean.BookAuthor"/>
+    <fullyQualifiedTypeName name="com.obl.demo.dao.BookCategoryDao"/>
+    <fullyQualifiedTypeName name="com.obl.demo.bean.BookCategory"/>
+    <fullyQualifiedTypeName name="com.obl.demo.bean.Book"/>
+    <fullyQualifiedTypeName name="com.obl.demo.service.OpenBookLibraryAdminService"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+</qualifiedTypeNameHistroy>

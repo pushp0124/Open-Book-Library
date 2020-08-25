@@ -1,0 +1,19 @@
+package com.obl.demo.dao;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.capgemini.bookStore.bean.User;
+@Repository
+public interface UserDao extends JpaRepository<User, Integer>{
+
+	@Query("select U from User U where U.mailId=:mailId")
+	public Optional<User> findByMailId(@Param("mailId") String mailId);
+	
+	@Query("select U from User U where U.phoneNo=:phoneNo")
+	public Optional<User> findByPhoneNo(@Param("phoneNo") String phoneNo);
+}

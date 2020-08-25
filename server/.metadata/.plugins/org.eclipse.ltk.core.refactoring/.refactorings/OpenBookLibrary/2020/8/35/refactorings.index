@@ -1,0 +1,6 @@
+1598355030726	Rename type 'CapgBookStoreController'
+1598355103694	Rename type 'CapgBookStoreException'
+1598355142466	Rename type 'BookStoreService'
+1598355394506	Rename field 'bookStoreService'
+1598355491752	Rename field 'bookLibraryService'
+1598355602927	Rename type 'BookStoreServiceImpl'
