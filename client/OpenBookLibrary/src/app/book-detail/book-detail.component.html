@@ -1,0 +1,68 @@
+
+
+<div class="alert alert-danger" *ngIf="errorMessage">
+    <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+    <strong>Error </strong>{{errorMessage}}
+  </div>
+  
+  <div class="alert alert-success" *ngIf="successMessage">
+    <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+    <strong>Success </strong> {{successMessage}}
+  </div>
+
+  <section title="Issued Books">
+    <mat-grid-list cols="3">
+      <mat-grid-tile *ngFor="let book of issuedBooks; let i = index;" style="margin : 5px; margin-bottom: 30px;">
+
+          <mat-card style="width:90% ;height: 100% padding">
+
+         
+
+          <mat-card-content>
+
+         
+              <img style="width: 200px; height : 240px; margin : 0 auto;" [src]="book.bookImages[0]" alt="Book Image(s)">
+                  <p>
+                   {{book.bookTitle}}
+                  </p>
+                  <button mat-raised-button color="accent" disabled >Already Issued To You</button>
+              </mat-card-content>
+              
+
+         
+          </mat-card>
+
+  </mat-grid-tile>
+  </mat-grid-list>
+    
+
+  </section>
+
+  <mat-grid-list cols="3">
+        <mat-grid-tile *ngFor="let book of books; let i = index;" style="margin : 5px; margin-bottom: 30px;">
+
+            <mat-card style="width:90% ;height: 100% padding">
+
+           
+
+            <mat-card-content>
+
+           
+                <img style="width: 200px; height : 240px; margin : 0 auto;" [src]="book.bookImages[0]" alt="Book Image(s)">
+                    <p>
+                     {{book.bookTitle}}
+                    </p>
+                  
+                    <button mat-raised-button color="accent" *ngIf = "book.isAvailable" (click) = "issueBook(i)" >Issue Book</button>
+                    <button mat-raised-button color="accent" disabled *ngIf = "!book.isAvailable" >Not Available</button>
+               
+                </mat-card-content>
+                
+
+           
+            </mat-card>
+
+    </mat-grid-tile>
+    </mat-grid-list>
+
+ 

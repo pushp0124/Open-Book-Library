@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { OpenBookLibraryService } from '../book-store.service';
+import { LibraryAuthService } from '../auth-service';
 
 @Component({
   selector: 'app-nav',
@@ -11,18 +11,18 @@ import { OpenBookLibraryService } from '../book-store.service';
 export class AppNavComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>; 
-  constructor(private OpenBookLibraryService : OpenBookLibraryService, private router : Router) { }
+  constructor(private authService : LibraryAuthService, private router : Router) { }
 
   ngOnInit() {
-    this.isLoggedIn$ = this.OpenBookLibraryService.isLoggedIn;
+    this.isLoggedIn$ = this.authService.isLoggedIn;
   }
 
   onLogout(){
-    this.OpenBookLibraryService.logout();              
+    this.authService.logout();              
   }
 
   showProfile() {
-    if(this.OpenBookLibraryService.loggedInUser.isAdmin) {
+    if(this.authService.loggedInUser.isAdmin) {
       this.router.navigate(['/adminhomepage/profile'])
     } else {
       this.router.navigate(['/userhomepage/profile'])
