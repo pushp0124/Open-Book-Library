@@ -1,4 +1,4 @@
-package com.obl.auth.beans;
+package com.obl.auth.models;
 
 import java.util.Arrays;
 
@@ -27,7 +27,7 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String userAddress;
 	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private Boolean isAdmin;
 	
 	@Column(nullable = false)

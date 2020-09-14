@@ -5,7 +5,28 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-  
+     
+                    <form class="input-group" *ngIf="isLoggedIn$ | async as isLoggedIn;">
+                        
+                        <div class="input-group-prepend">
+                            <select name="search_param" (change)="selectOption($event.target.value)"
+                            id="search_param" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <option [value]="i" *ngFor="let option of options; let i = index;" >{{option}}</option>
+                            </select>
+                        </div>
+                        <input type="text" class="form-control" #searchText [placeholder]="searchPlaceholder">
+                        <div class="input-group-append">
+                          
+                            <button type="button" class="btn btn-warning" (click)="searchFormSubmitted(searchText.value)">
+                              <h1 class="material-icons">search</h1>
+                            </button>
+                       
+                        </div>
+                       
+                </form>
+
+      
+
       <ul class="navbar-nav ml-auto">
   
   
@@ -29,5 +50,7 @@
           <a class="nav-link" routerLink="/about" routerLinkActive="active">About</a>
         </li>
       </ul>
+
+      
     </div>
   </nav>

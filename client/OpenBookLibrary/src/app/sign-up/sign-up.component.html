@@ -1,61 +1,64 @@
-
-
 <div class="back" style="overflow: hidden;">
 
 
     <div class="alert alert-danger" *ngIf="errorMessage">
-        <button type="button" class="close" aria-hidden="true" (click) = "errorClosed()">&times;</button>
+        <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
         <strong>Error </strong>{{errorMessage}}
     </div>
-    
+
     <div class="alert alert-success" *ngIf="successMessage">
-        <button type="button" class="close" (click) = "successClosed()" aria-hidden="true">&times;</button>
+        <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
         <strong>Success </strong> {{successMessage}}
     </div>
-    
-    <mat-card style="margin: 0 auto; width: 70%;">
+    <mat-progress-bar mode="indeterminate" *ngIf = "isRegistering" style="margin-top: 5px;"></mat-progress-bar>
+    <mat-card style="margin: 0 auto; width: 70%; margin-top : 30px;">
 
         <mat-horizontal-stepper linear #stepper>
             <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
                 <form [formGroup]="firstFormGroup">
                     <ng-template matStepLabel>Personal Details</ng-template>
                     <p>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Name</mat-label>
-                            <input matInput formControlName="nameCtrl" placeholder="Last name, First name" required>
+                        <mat-form-field  appearance="outline" style="width: 100%">
+                            <mat-label>First Name</mat-label>
+                            <input type="text" matInput formControlName="firstNameCtrl" placeholder="First name">
+                            <mat-error *ngIf="fName.hasError('required')">
+                                This field is mandatory
+                            </mat-error>
+                            <mat-error *ngIf="fName.hasError('pattern')">
+                                Only characters are allowed
+                            </mat-error>
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field  appearance="outline" style="width: 100%">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput formControlName="lastNameCtrl" placeholder="Last name">
+                            <mat-error *ngIf="lName.hasError('required')">
+                                This field is mandatory
+                            </mat-error>
+                            <mat-error *ngIf="lName.hasError('pattern')">
+                                Only characters are allowed
+                            </mat-error>
                         </mat-form-field>
                     </p>
 
                     <p>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field  appearance="outline" style="width: 100%">
                             <mat-label>Address</mat-label>
-                            <input matInput formControlName="adressCtrl" placeholder="Street, City, PinCode, State, Country" required>
+                            <input matInput formControlName="addressCtrl"
+                                placeholder="#1, North Street, Delhi - 11">
+                                <mat-error>{{address.error}} </mat-error>
+                                <mat-error *ngIf="address.hasError('required')">
+                                    This field is mandatory
+                                </mat-error>
+                                <mat-error *ngIf="address.hasError('pattern')">
+                                   Address Invalid Format
+                                </mat-error>
                         </mat-form-field>
                     </p>
 
-                    <!-- <p>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Select Your Nearest Capgemini Ev Charging Station</mat-label>
-                            <mat-select [(value)]="selectedStation"
-                                (selectionChange)="stationListClicked()">
-                                <mat-option *ngFor="let station of stations" [value]="station">{{station.city}}
-                                    {{station.campusLocation}}</mat-option>
-                            </mat-select>
-                            <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
-                        </mat-form-field>
-                    </p>
-                    <p>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Select Your Machine Type</mat-label>
-                            <mat-select [(value)]="selectedMachineType"
-                                (selectionChange)="machineListClicked()">
-                                <mat-option *ngFor="let type of chargerTypes" [value]="type">{{type}}</mat-option>
-                            </mat-select>
-                            <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
-                        </mat-form-field>
-                    </p> -->
                     <div>
-                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                        <button mat-raised-button matStepperNext color="primary" [disabled]="!firstFormGroup.valid">Next</button>
                     </div>
                 </form>
             </mat-step>
@@ -63,22 +66,35 @@
                 <form [formGroup]="secondFormGroup">
                     <ng-template matStepLabel>Fill Communication Details</ng-template>
                     <p>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field  appearance="outline" style="width: 100%">
                             <mat-label>Email</mat-label>
-                            <input matInput formControlName="emailCtrl" placeholder="Your Email" required>
+                            <input matInput formControlName="emailCtrl" placeholder="Your Email" email>
+
+                            <mat-error *ngIf="email.hasError('required')">
+                                This field is mandatory
+                            </mat-error>
+                            <mat-error *ngIf="email.hasError('email')">
+                                Not a valid email
+                            </mat-error>
                         </mat-form-field>
                     </p>
                     <p>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline" style="width: 100%">
                             <mat-label>Phone Number</mat-label>
-                            <input matInput formControlName="phoneCtrl" placeholder="Your Phone Number" required
-                                type="number">
+                            <span matPrefix>+91- &nbsp;</span>
+                            <input matInput formControlName="phoneCtrl"  style="width: 100%" placeholder="Your Phone Number" maxLength="10">
+                            <mat-error *ngIf="phoneNo.hasError('required')">
+                                This field is mandatory
+                            </mat-error>
+                            <mat-error *ngIf="phoneNo.hasError('pattern')">
+                                Phone number is not valid
+                            </mat-error>
                         </mat-form-field>
                     </p>
                     <div>
                         <button mat-raised-button matStepperPrevious color="primary"
                             style="margin-right: 20px;">Back</button>
-                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                        <button mat-raised-button matStepperNext color="primary" [disabled]="!secondFormGroup.valid">Next</button>
                     </div>
                 </form>
             </mat-step>
@@ -86,21 +102,55 @@
                 <form [formGroup]="thirdFormGroup">
                     <ng-template matStepLabel>Password Details</ng-template>
                     <p>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Enter your password</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'" (change)="onPasswordChange()"
-                                formControlName="passwordCtrl">
+                        <br>
+
+                        <mat-slide-toggle (change)="changed()" [checked] = "isShowDetails">Show Password Details</mat-slide-toggle>
+                        <br><br>
+                        <mat-form-field appearance="outline" style="width: 100%" [color]="passwordComponent.color">
+                            <mat-label>Password</mat-label>
+
+                            <input matInput #passwordTextField required placeholder="Password"
+                                [type]="hide ? 'password' : 'text'" (change)="onPasswordChange()"
+                                formControlName="passwordCtrl" [maxLength] = "passwordComponent.max">
                             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                                 [attr.aria-pressed]="hide">
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
+                            <mat-hint align="end" aria-live="polite">
+                                {{password.value.length}} / {{passwordComponent.max}}
+                            </mat-hint>
+                            <mat-error *ngIf="password.hasError('required')">
+                                This field should not be empty
+                            </mat-error>
+                            <mat-error *ngIf="password.hasError('pattern')">
+                                Password is not valid
+                            </mat-error>
                         </mat-form-field>
+                        <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
+                            [password]="passwordTextField.value">
+                        </mat-password-strength>
+                        <mat-password-strength-info *ngIf="isShowDetails"
+                            lowerCaseCriteriaMsg="Contains at least one lowercase character"
+                            upperCaseCriteriaMsg="Contains at least one uppercase character"
+                            digitsCriteriaMsg="Contains at least one digit character"
+                            specialCharsCriteriaMsg="Contains at least one special character"
+                            minCharsCriteriaMsg="Contains at least 8 character"
+                            [passwordComponent]="passwordComponent">
+                        </mat-password-strength-info>
                     </p>
+
                     <p>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline" style="width: 100%">
                             <mat-label>Confirm password</mat-label>
                             <input matInput [type]="hide ? 'password' : 'text'" (change)="onPasswordChange()"
-                                formControlName="confirmPasswordCtrl">
+                                formControlName="confirmPasswordCtrl" [maxLength] = "passwordComponent.max">
+                                <mat-hint align="end" aria-live="polite">
+                                        {{confirm_password.value.length}} / {{passwordComponent.max}}
+                                    </mat-hint>
+                            <mat-error *ngIf="confirm_password.hasError('mismatch')">
+                                Passwords don't match
+                            </mat-error>
+
                             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                                 [attr.aria-pressed]="hide">
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -108,17 +158,15 @@
                         </mat-form-field>
                     </p>
 
-                    
-                    <div class="alert alert-danger"  *ngIf="confirm_password.hasError('mismatch')">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        Passwords do not match.
-                    </div>
-                
+
+
+
                     <div>
                         <button mat-raised-button matStepperPrevious color="primary"
                             style="margin-right: 20px;">Back</button>
-                        <button mat-raised-button matStepperNext color="primary" [disabled]="!thirdFormGroup.valid"
-                            (click)="registerEmployee()">Register</button>
+                        <button mat-raised-button matStepperNext color="primary"
+                            [disabled]="!thirdFormGroup.valid || strength < 100"
+                            (click)="registerEmployee()">{{buttonTxt}}</button>
                     </div>
                 </form>
             </mat-step>

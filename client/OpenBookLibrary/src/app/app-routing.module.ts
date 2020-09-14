@@ -11,18 +11,22 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { AdminAddBookComponent } from './admin-add-book/admin-add-book.component';
+import { MyBooksComponent } from './my-books/my-books.component';
 
 
 const routes: Routes = [
 
-  { path: 'appnav', component: AppNavComponent},
-  { path: 'userlogin', component: UserLoginComponent},
-  { path: 'userhomepage',
+  { path: 'appnav', component: AppNavComponent },
+  { path: 'userlogin', component: UserLoginComponent },
+  {
+    path: 'userhomepage',
     component: UserHomePageComponent,
     canActivate: [AuthGuard],
     children: [
       { path: '', component: UserHomeChildComponent },
-      { path : 'book-detail', component : BookDetailComponent}
+      { path: 'my-books', component: MyBooksComponent },
+      { path: 'book-detail', component: BookDetailComponent },
     ]
   },
   {
@@ -31,10 +35,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', component: AdminHomeChildComponent },
+      { path: 'add-book', component: AdminAddBookComponent },
+      { path: 'add-book-category', component: AdminAddBookComponent },
+      { path: 'book-transactions', component: AdminAddBookComponent }
     ]
 
   },
-  { path : 'encrypted/adminsignup' ,component : SignUpComponent},
+  { path: 'encrypted/adminsignup', component: SignUpComponent },
   { path: 'signup', component: SignUpComponent },
   { path: '', component: HomeComponent },
   { path: '**', component: PageNotFoundComponent }

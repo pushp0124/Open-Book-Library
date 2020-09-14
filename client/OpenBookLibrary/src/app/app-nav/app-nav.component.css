@@ -1,0 +1,48 @@
+/* /*
+A custom Bootstrap 3.3.x template
+from http://bootply.com
+
+This CSS code should follow the 'bootstrap.css'
+in your HTML file.
+
+license: MIT
+author: bootply.com
+*/
+
+
+select {
+    /* margin: 50px; */
+    width: 120px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    height: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none; 
+     appearance: none;
+    background:  no-repeat #eee;
+  }
+
+  select:focus {
+      outline : 4px solid #ffc107
+  }
+  
+  /* CAUTION: IE hackery ahead */
+  select::-ms-expand { 
+      display: none; /* remove default arrow on ie10 and ie11 */
+  }
+  
+  /* target Internet Explorer 9 to undo the custom arrow */
+  @media screen and (min-width:0\0) {
+      select {
+          background:none\9;
+          padding: 5px\9;
+      } 
+  }
+  input:focus {
+    outline : 4px solid #ffc107
+  }
+
+ 
+  .input-group {
+      width : 90%;
+  }

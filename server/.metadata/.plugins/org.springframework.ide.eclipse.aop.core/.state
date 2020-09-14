@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aop-reference-model>
 <aop-project name="library-service-discovery"/>
-<aop-project name="OpenBookLibrary"/>
 <aop-project name="library-book-service"/>
 <aop-project name="library-authorization-service"/>
 </aop-reference-model>

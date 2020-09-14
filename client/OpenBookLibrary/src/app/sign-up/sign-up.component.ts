@@ -22,22 +22,26 @@ export class SignUpComponent implements OnInit {
   isAdminSignUp = false;
   errorMessage : string;
   successMessage : string;
-
+  isShowDetails: boolean = true;
+  strength : number = 0;
   
+  buttonTxt = "Register"
+  isRegistering = false;
   ngOnInit() {
     
     this.firstFormGroup = this._formBuilder.group({
-      nameCtrl: ['', Validators.required],
-      addressCtrl : ['', Validators.required]
+      firstNameCtrl: ['', [Validators.required,  Validators.pattern('^[a-zA-Z ]*$')]],
+      lastNameCtrl: ['', [Validators.required,  Validators.pattern('^[a-zA-Z ]*$')]],
+      addressCtrl : ['', [Validators.required, Validators.pattern("^[#.0-9a-zA-Z\s,-]+$")]]
 
     });
     this.secondFormGroup = this._formBuilder.group({
       emailCtrl: ['', [Validators.required,Validators.email]],
-      phoneCtrl : ['', Validators.required]
+      phoneCtrl : ['', [Validators.required, Validators.pattern('(0/91)?[7-9][0-9]{9}')]]
     });
 
     this.thirdFormGroup = this._formBuilder.group({
-      passwordCtrl: ['', Validators.required],
+      passwordCtrl: ['', [Validators.required]],
       confirmPasswordCtrl : ['', Validators.required]
     });
     
@@ -46,12 +50,14 @@ export class SignUpComponent implements OnInit {
 
   registerEmployee() {
       //get the current route path
+      this.buttonTxt = "Registering ..."
+      this.isRegistering = true
       let currentUrl = this.router.url
       let arrayOfUrls = currentUrl.split("/");
       if(arrayOfUrls[arrayOfUrls.length - 1] == 'adminSignup') {
           this.isAdminSignUp = true;
       }
-      let user = new User(null,this.email.value,this.name.value,this.phoneNo.value,this.address.value,this.isAdminSignUp,null);     
+      let user = new User(null,this.email.value,this.fName.value + " " + this.lName.value,this.phoneNo.value,this.address.value,this.isAdminSignUp,null);     
        this.authService.registerUser(user,this.password.value).subscribe((employeeId) => {
         user.userId = employeeId;
         this.authService.loggedInUser = user;
@@ -63,6 +69,8 @@ export class SignUpComponent implements OnInit {
         }   
       }, (loginError) => {
           this.errorMessage = loginError.error.message;  
+          this.buttonTxt = "Register"
+          this.isRegistering = false
       })
   }
 
@@ -84,8 +92,12 @@ export class SignUpComponent implements OnInit {
     return this.secondFormGroup.controls['emailCtrl'];
   }
 
-  get name(): AbstractControl {
-    return this.firstFormGroup.controls['nameCtrl'];
+  get fName(): AbstractControl {
+    return this.firstFormGroup.controls['firstNameCtrl'];
+  }
+
+  get lName(): AbstractControl {
+    return this.firstFormGroup.controls['lastNameCtrl'];
   }
   get phoneNo(): AbstractControl {
     return this.secondFormGroup.controls['phoneCtrl'];
@@ -100,6 +112,13 @@ export class SignUpComponent implements OnInit {
     return this.thirdFormGroup.controls['confirmPasswordCtrl'];
   }
 
+  onStrengthChanged(strength: number) {
+    this.strength = strength;
+  }
+
+  changed() {
+    this.isShowDetails = !this.isShowDetails;
+  }
 
   errorClosed() {
     this.errorMessage = undefined;

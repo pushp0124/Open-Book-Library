@@ -1,0 +1,64 @@
+  .my-books-action {
+     margin : 10px;
+
+ }
+ .my-books-action:hover {
+     color: black;
+    
+ }
+/*
+ .mat-raised-button.mat-accent .mat-button-focus-overlay {
+    background-color: transparent;
+  }
+ 
+  .headerSortDown:after,
+.headerSortUp:after {
+  content: ' ';
+  position: relative;
+  left: 2px;
+  border: 8px solid transparent;
+}
+
+.headerSortDown:after {
+  top: 10px;
+  border-top-color: silver;
+}
+
+.headerSortUp:after {
+  bottom: 15px;
+  border-bottom-color: silver;
+}
+
+.headerSortDown,
+.headerSortUp {
+  padding-right: 10px;
+}
+.my-books-table {
+    width : 100%;
+} */
+.wrap-book-title {
+   
+    width: 200px;
+    max-width : 200px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+} 
+
+
+/* .header-cell {
+    margin: 0px auto;
+    display:flex;
+    justify-content:flex-end;
+    
+    border : solid;
+   
+    background-color : black;
+    
+} */
+
+
+
+
+ 

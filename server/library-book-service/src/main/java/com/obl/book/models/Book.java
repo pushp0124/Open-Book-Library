@@ -2,6 +2,7 @@ package com.obl.book.models;
 
 import java.util.Arrays;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class Book {
 	@ManyToOne
 	private BookPublisher bookPublisher;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition="LONGTEXT")
 	private String bookDescription;
 	
 	@Column(nullable = false)

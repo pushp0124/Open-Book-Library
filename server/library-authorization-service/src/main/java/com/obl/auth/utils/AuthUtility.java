@@ -2,8 +2,8 @@ package com.obl.auth.utils;
 
 import java.util.Optional;
 
-import com.obl.auth.beans.User;
 import com.obl.auth.exceptions.OpenBookLibraryException;
+import com.obl.auth.models.User;
 import com.obl.auth.repos.UserRepo;
 
 public class AuthUtility {

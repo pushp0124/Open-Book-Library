@@ -17,10 +17,28 @@ import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminAddBookComponent } from './admin-add-book/admin-add-book.component';
+import { MyBooksComponent } from './my-books/my-books.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatSortModule } from '@angular/material/sort';
+import {CdkTableModule} from '@angular/cdk/table';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { MatSlideToggleModule } from '@angular/material';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
+//Charts
+import { ChartsModule, ThemeService } from 'ng2-charts';
+import { AdminCardActionComponent } from './admin-card-action/admin-card-action.component';
+import { AddBookCategoryComponent } from './add-book-category/add-book-category.component';
+import { DepositBookComponent } from './deposit-book/deposit-book.component';
 
 
 @NgModule({
@@ -35,7 +53,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PageNotFoundComponent,
     BookDetailComponent,
     UserLoginComponent,
-    SignUpComponent
+    SignUpComponent,
+    AdminAddBookComponent,
+    MyBooksComponent,
+    AdminCardActionComponent,
+    AddBookCategoryComponent,
+    DepositBookComponent
   ],
   imports: [
     BrowserModule,
@@ -49,9 +72,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatStepperModule,
     MatInputModule,
-    ReactiveFormsModule
+    MatSelectModule,
+    MatTooltipModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    ReactiveFormsModule,
+    MatProgressBarModule,
+    CdkTableModule,
+    MatPasswordStrengthModule,
+    MatSlideToggleModule,
+    ChartsModule,
+    MatAutocompleteModule
   ],
-  providers: [],
+  providers: [ThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

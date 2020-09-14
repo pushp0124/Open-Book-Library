@@ -1,0 +1,104 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+    <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+    <strong>Error </strong>{{errorMessage}}
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+    <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+    <strong>Success </strong> {{successMessage}}
+</div>
+
+<div class="container my-container">
+
+    <div class="row justify-content-start">
+        <div class="col-sm-6 col-md-3 col-lg-3" *ngFor="let book of books; let i = index;">
+            <mat-card class="column my-column">
+                <mat-card-content>
+                    <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;">
+                    <p class="wrap-book-title">
+                        {{book.bookTitle}}
+
+                    </p>
+
+
+
+                    <button mat-raised-button color="accent" *ngIf="book.isAvailable" class = "book-button"(click)="viewBookDetail(i)"><span class="book-button">View
+                        Book Detail</span></button>
+                    <button mat-raised-button color="accent" class = "book-button" disabled *ngIf="!book.isAvailable">Not Available</button>
+
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+</div>
+
+<!-- <div class="container">
+    
+    <div class="row">
+        <div class="col">
+            
+        </div>
+    </div>
+    
+</div>
+
+<div class="container">
+    
+</div> -->
+
+
+<!-- <section title="Issued Books">
+    <mat-grid-list cols="3">
+      <mat-grid-tile *ngFor="let book of issuedBooks; let i = index;" style="margin : 5px; margin-bottom: 30px;">
+
+          <mat-card style="width:90% ;height: 100% padding">
+
+         
+
+          <mat-card-content>
+
+         
+              <img style="width: 200px; height : 240px; margin : 0 auto;" [src]="book.bookImages[0]" alt="Book Image(s)">
+                  <p>
+                   {{book.bookTitle}}
+                  </p>
+                  <button mat-raised-button color="accent" disabled >Already Issued To You</button>
+              </mat-card-content>
+              
+
+         
+          </mat-card>
+
+  </mat-grid-tile>
+  </mat-grid-list>
+    
+
+  </section> -->
+
+<!-- <mat-grid-list cols="3">
+        <mat-grid-tile *ngFor="let book of books; let i = index;" style="margin : 5px; margin-bottom: 30px;">
+
+            <mat-card style="width:90% ;height: 100% padding">
+
+           
+
+            <mat-card-content>
+
+           
+                <img style="width: 200px; height : 240px; margin : 0 auto;" [src]="book.bookImages[0]" alt="Book Image(s)">
+                    <p>
+                     {{book.bookTitle}}
+                    </p>
+                  
+                    <button mat-raised-button color="accent" *ngIf = "book.isAvailable" (click) = "issueBook(i)" >Issue Book</button>
+                    <button mat-raised-button color="accent" disabled *ngIf = "!book.isAvailable" >Not Available</button>
+               
+                </mat-card-content>
+                
+
+           
+            </mat-card>
+
+    </mat-grid-tile>
+    </mat-grid-list> -->

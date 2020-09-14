@@ -2,13 +2,17 @@ package com.obl.book.models;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.obl.book.models.common.User;
+import com.obl.book.models.enums.IssueBookStatus;
 
 
 @Entity
@@ -22,9 +26,15 @@ public class IssueBook {
 	private User issuedToUser;
 	
 	
+	@Column(nullable = false)
 	private Date issueDate;
 	
+	@Column(nullable = false)
 	private Date returnDate;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private IssueBookStatus bookStatus; 
 	
 	@ManyToOne
 	private Book issuedBook;
@@ -69,16 +79,20 @@ public class IssueBook {
 		this.issuedBook = issuedBook;
 	}
 
+	public IssueBookStatus getBookStatus() {
+		return bookStatus;
+	}
+
+	public void setBookStatus(IssueBookStatus bookStatus) {
+		this.bookStatus = bookStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "IssueBook [issueId=" + issueId + ", issuedToUser=" + issuedToUser + ", issueDate=" + issueDate
-				+ ", returnDate=" + returnDate + ", issuedBook=" + issuedBook + "]";
+				+ ", returnDate=" + returnDate + ", bookStatus=" + bookStatus + ", issuedBook=" + issuedBook + "]";
 	}
 
-
-	
-	
-	
 	
 	
 }

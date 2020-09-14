@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.obl.auth.beans.User;
 import com.obl.auth.exceptions.OpenBookLibraryException;
+import com.obl.auth.models.User;
 import com.obl.auth.services.AuthService;
 
 @RestController

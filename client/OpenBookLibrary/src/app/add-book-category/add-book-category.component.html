@@ -1,0 +1,42 @@
+<div class="mat-elevation-z8">
+    <div  *ngIf="isLoadingResults || isRateLimitReached">
+        <mat-progress-bar *ngIf="isLoadingResults" color="accent" mode="indeterminate"></mat-progress-bar>
+        <div  *ngIf="isRateLimitReached">
+           It is our fault, Please try again later!
+        </div>
+    </div>
+
+    <div>
+
+        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort matSortActive="categoryId"   matSortDisableClear
+            matSortDirection="desc">
+            <!-- Category Id Column -->
+            <ng-container matColumnDef="categoryId">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">#</th>
+                <td cdk-cell style = "color:black" *matCellDef="let row">{{row.categoryId}}</td>
+            </ng-container>
+
+            <!-- Category Name Column -->
+            <ng-container matColumnDef="category">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">Category Name</th>
+                <td cdk-cell style = "color : black" *matCellDef="let row">{{row.categoryName}}</td>
+            </ng-container>
+            <!-- Action  Column -->
+            <ng-container   matColumnDef="actions">
+                <th cdk-header-cell *matHeaderCellDef>
+                    Action
+                </th>
+                <td cdk-cell *matCellDef="let row">
+                        <button type="button" mat-raised-button class="my-books-action" color="accent"
+                        #tooltip="matTooltip" matTooltip="View Book Detail" matTooltipPosition="below"
+                        (click)="updateBookCategory(row)"><i class="material-icons">create</i></button>
+                </td>
+            </ng-container>
+
+            <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr cdk-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+</div>

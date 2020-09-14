@@ -1,0 +1,30 @@
+.my-column:hover {
+    box-shadow: 10px 10px 5px grey;
+   
+}
+.my-column  {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.my-container {
+    
+    background-color: #F5F5F5;
+    border: solid #F0F0F0;
+    border-radius: 5px;
+   
+}
+
+.wrap-book-title {
+   
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    margin: 5px auto;
+}
+
+.book-button {
+    margin : 0px auto;
+    width : 90%
+}

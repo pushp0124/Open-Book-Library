@@ -17,6 +17,8 @@ export class UserLoginComponent implements OnInit {
 
   hide = true;
 
+  buttonTxt  = "Login"
+  isLoggingIn  = false;
   constructor( private authService: LibraryAuthService, private router: Router, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -29,16 +31,21 @@ export class UserLoginComponent implements OnInit {
 
   loginUser() {
    
+    this.buttonTxt = "Logging you In ..."
+    this.isLoggingIn = true
     this.authService.loginUser(this.emailCtrl.value, this.passwordCtrl.value).subscribe(employee => {
       this.authService.loggedInUser = employee;
       this.authService.loggedIn.next(true);
+     
       if(employee.isAdmin) {
         this.router.navigate(['./adminhomepage'])
       } else {
-        this.router.navigate(['./userhomepage/book-detail'])
+        this.router.navigate(['./userhomepage'])
       }
       
     }, (loginError) => { 
+      this.buttonTxt = "Log In!"
+      this.isLoggingIn = false;
       this.errorMessage = loginError.error.message; 
 
     }

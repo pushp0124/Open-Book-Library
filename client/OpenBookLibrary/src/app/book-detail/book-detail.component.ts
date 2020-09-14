@@ -12,38 +12,34 @@ import { LibraryAuthService } from '../auth-service';
 })
 export class BookDetailComponent implements OnInit {
 
-  errorMessage : string;
-  successMessage : string;
-  books : Book[];
-  loggedInUserId : number;
-  issuedBooks : Book[] = [];
-  constructor(private bookService : LibraryBookService, private authService : LibraryAuthService) { }
+  errorMessage: string;
+  successMessage: string;
+  loggedInUserId: number;
+  detailAboutBook: IssueBook;
+  constructor(private bookService: LibraryBookService, private authService: LibraryAuthService) { }
 
   ngOnInit() {
     this.loggedInUserId = this.authService.loggedInUser.userId;
-    this.bookService.viewBooks().subscribe((books) => {
-        this.books = books;
+    this.detailAboutBook = this.bookService.detailAboutBook;
+
+  }
+
+  issueBook() {
+    this.bookService.issueBook(this.detailAboutBook.issuedBook.bookId).subscribe((issueBook: IssueBook) => {
+      console.log("From IssueBook" + issueBook);
+      this.successMessage = "Book Issued successfully, its return date is " + issueBook.returnDate;
+    }, (bookIssueError) => {
+      console.log(bookIssueError);
+      this.errorMessage = bookIssueError.error.message;
     })
   }
 
-  issueBook(index : number){
-     this.bookService.issueBook(this.books[index].bookId).subscribe((issueBook : IssueBook) => {
-        this.successMessage = "Book Issued successfully, its return date is " + issueBook.returnDate;
-        this.issuedBooks.push(issueBook.issuedBook);
-        this.books.splice(index,1);
-       
-      },(bookIssueError) => {
-        console.log(bookIssueError);
-          this.errorMessage = bookIssueError.error.message;
-      })
- }
+  errorClosed() {
+    this.errorMessage = undefined;
+  }
 
- errorClosed() {
-  this.errorMessage = undefined;
-}
-
-successClosed() {
-  this.successMessage = undefined;
-}
+  successClosed() {
+    this.successMessage = undefined;
+  }
 
 }

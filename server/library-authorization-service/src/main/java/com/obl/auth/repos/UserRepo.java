@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.obl.auth.beans.User;
+import com.obl.auth.models.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
