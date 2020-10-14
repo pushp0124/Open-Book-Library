@@ -1,18 +1,17 @@
 <div class="sidebar">
-    <a routerLink="/userhomepage" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Home </a>
-    <a routerLink="my-books" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> My Books</a>
-    <!-- <a routerLink="userbookslot" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Book Slot</a>
+
+
+  <a routerLink="/catalog/0" routerLinkActive="active"> Home </a>
+  <a routerLink="/my-books" routerLinkActive="active"> My Borrows</a>
+  <a routerLink="/library-feedback" routerLinkActive="active"> Redressal Group </a>
+  <!-- <a routerLink="userbookslot" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Book Slot</a>
     <a routerLink="userbookingsreport" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Bookings Report</a>
     <a routerLink="usermybookings" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> My Bookings</a> -->
+</div>
+
+
+<div class="content">
+  <div class="col-md-12 card card-body text-center">
+    <router-outlet> </router-outlet>
   </div>
-  
-
-  <div class="content">
-    <div class="col-md-12 card card-body text-center">
-       <router-outlet> </router-outlet>
-   </div>
-  </div>
-
-  
-
-   
+</div>

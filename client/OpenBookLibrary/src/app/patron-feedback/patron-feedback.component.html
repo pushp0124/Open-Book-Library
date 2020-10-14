@@ -1,0 +1,62 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+  <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+  <strong>Error </strong>{{errorMessage}}
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+  <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+  <strong>Success </strong> {{successMessage}}
+</div>
+
+
+<div class="container-fluid">
+
+  <mat-progress-bar mode="indeterminate" *ngIf="!dataLoaded && errorMessage == undefined" color="accent"></mat-progress-bar>
+  <div class="chat">
+    <div class="chat-header clearfix">
+      <div class="chat-about">
+        <div class="chat-with">Redressal Group</div>
+        <div class="chat-num-messages">Help us to resolve your issues immediately!</div>
+      </div>
+
+    </div>
+    <div class="chat-history">
+      <ul style="list-style-type: none;" *ngIf = "dataLoaded">
+        <ng-container *ngFor="let feedback of feedbacks">
+          <li class="clearfix align-right" *ngIf="feedback.senderId == loggedInUserId">
+            <div class="message-data">
+              <span class="message-data-time">{{feedback.timestamp | date:'medium'}}</span> &nbsp;
+              <span class="message-data-name">{{feedback.senderEmail}}</span>&nbsp; <i class="fa fa-circle me"></i>
+
+            </div>
+            <div class="message my-message float-right" style="width: 60%">
+              {{feedback.message}}
+            </div>
+          </li>
+          <li class="align-left" *ngIf="feedback.senderId != loggedInUserId">
+            <div class="message-data">
+              <span class="message-data-name"><i class="fa fa-circle online"></i> {{feedback.senderEmail}}</span>
+              <span class="message-data-time">{{feedback.timestamp | date:'short'}}</span>
+            </div>
+            <div class="message other-message" style="width: 60%">
+              {{feedback.message}}
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+
+    </div> <!-- end chat-history -->
+
+    <div>
+      <form [formGroup]="feedbackFormGroup">
+        <mat-form-field appearance="outline"  style="width: 100%">
+          <mat-label>Type your message</mat-label>
+          <textarea matInput placeholder="Unable to borrow" formControlName="feedbackCtrl"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="addFeedback()" [disabled]="!feedbackFormGroup.valid">Send</button>
+      </form>
+
+
+    </div> <!-- end chat-message -->
+
+  </div> <!-- end chat -->

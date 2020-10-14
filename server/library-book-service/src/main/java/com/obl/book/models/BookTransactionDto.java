@@ -2,10 +2,10 @@ package com.obl.book.models;
 
 import java.util.List;
 
-public class IssueBookApi {
+public class BookTransactionDto {
 	
 	private Long total_count;
-	private List<IssueBook> books;
+	private List<BookTransaction> books;
 	public Long getTotal_count() {
 		return total_count;
 	}
@@ -13,10 +13,10 @@ public class IssueBookApi {
 		this.total_count = total_count;
 	}
 	
-	public List<IssueBook> getBooks() {
+	public List<BookTransaction> getBooks() {
 		return books;
 	}
-	public void setBooks(List<IssueBook> books) {
+	public void setBooks(List<BookTransaction> books) {
 		this.books = books;
 	}
 	@Override

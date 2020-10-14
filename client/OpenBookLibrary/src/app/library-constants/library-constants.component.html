@@ -1,0 +1,80 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+    <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+    <strong>Error </strong>{{errorMessage}}
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+    <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+    <strong>Success </strong> {{successMessage}}
+</div>
+
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Warning</strong> Upadting Settings, will update the constants for all of the user(s) and transaction(s)
+</div>
+
+
+<mat-progress-bar mode="indeterminate" *ngIf="!dataLoaded && errorMessage == undefined"></mat-progress-bar>
+<mat-card *ngIf="dataLoaded" style="text-align: center">
+        <button mat-button color="accent" (click)="toggleEdit()">{{settingsButtonText}} </button>
+    <form [formGroup]="constantsFormGroup">
+        <mat-form-field appearance="outline" style="width: 100%; margin : 5px">
+            <mat-label>Fine Per Day</mat-label>
+            <input matInput formControlName="lateFineCtrl" matinput="">
+            <mat-error *ngIf="lateFineCtrl.hasError('required')">
+                This field is mandatory
+            </mat-error>
+            <mat-error *ngIf="lateFineCtrl.hasError('min')">
+                Late Fine should be greater than or equal to 0
+            </mat-error>
+            <mat-error *ngIf="lateFineCtrl.hasError('max')">
+                Late Fine should not be greater than 1000
+            </mat-error>
+            <mat-error *ngIf="lateFineCtrl.hasError('pattern')">
+                Invalid Number Format
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%; margin : 5px">
+            <mat-label>Maximum Books Borrow Limit</mat-label>
+            <input matInput formControlName="maxBooksLimitCtrl" matinput="">
+            <mat-error *ngIf="maxBooksLimitCtrl.hasError('required')">
+                This field is mandatory
+            </mat-error>
+            <mat-error *ngIf="maxBooksLimitCtrl.hasError('min')">
+                Borrow Limit should be greater than 0
+            </mat-error>
+            <mat-error *ngIf="maxBooksLimitCtrl.hasError('max')">
+                Borrow Limit should not be greater than 10
+            </mat-error>
+            <mat-error *ngIf="maxBooksLimitCtrl.hasError('pattern')">
+                Invalid Number Format
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%; margin : 5px">
+            <mat-label>Borrow Book For Days</mat-label>
+            <input matInput formControlName="borrowBookDaysCtrl" matinput="">
+            <mat-error *ngIf="borrowBookDaysCtrl.hasError('required')">
+                This field is mandatory
+            </mat-error>
+            <mat-error *ngIf="borrowBookDaysCtrl.hasError('min')">
+                Borrow Book should be greater than or equal to 0
+            </mat-error>
+            <mat-error *ngIf="borrowBookDaysCtrl.hasError('max')">
+                Borrow Book should not be greater than 1000
+            </mat-error>
+            <mat-error *ngIf="borrowBookDaysCtrl.hasError('pattern')">
+                Invalid Number Format
+            </mat-error>
+
+        </mat-form-field>
+
+        <br>
+
+        <button mat-raised-button color="accent" style="margin : 0 auto;" [disabled]="!constantsFormGroup.valid"
+            (click)="updateConstants()">Update</button>
+    </form>
+</mat-card>

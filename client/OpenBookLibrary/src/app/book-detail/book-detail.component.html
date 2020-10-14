@@ -8,24 +8,101 @@
     <strong>Success </strong> {{successMessage}}
 </div>
 
-<div class="container">
-    
-    <div class="row justify-content-start">
-      
-        <div class="col-md-3 col-sm-6">
-            <img [src] = "detailAboutBook.issuedBook.bookImages[0]" style = "max-width: 100% ;height : 250px;">
-        </div>
-        <div class="col-md-9 col-sm-6">
-                <h1> {{detailAboutBook.issuedBook.bookTitle}}</h1>
-                <p>Author : {{detailAboutBook.issuedBook.bookAuthor.authorName}}</p>
-                <p>{{detailAboutBook.issuedBook.bookDescription}}</p>
-                <p>Is Available : {{detailAboutBook.issuedBook.isAvailable}}</p>
+<div class="container" *ngIf="dataLoaded">
 
-                <button mat-raised-button color="accent" *ngIf="(detailAboutBook.issueId == undefined || detailAboutBook.bookStatus == 'RETURNED') && detailAboutBook.issuedBook.isAvailable" (click)="issueBook()">Issue Book</button>
-                   
+    <div class="row justify-content-start">
+
+        <div class="col-md-4 col-sm-6">
+            <img [src]="book.bookImages[0]" style="max-width: 100% ;height : 300px; border : 2px solid #ddd" class="zoom">
+            <br>
+            <button mat-raised-button color="primary" *ngIf="!book.isAvailable" (click)="notifyMe(i)"
+                style="width: 70%; margin : 20px">Notify Me</button>
+            <button mat-raised-button color="accent" (click)="borrowBook()" style="width: 70%; margin : 20px"
+                *ngIf="book.isAvailable">Borrow
+                Book</button>
+        </div>
+        <div class="col-md-8 col-sm-6">
+            <h3> {{book.bookTitle}}</h3>
+            <p>By : {{book.bookAuthor.authorName}} </p>
+           
+            <ul class="list-inline rating-list" *ngFor="let star of stars" style="display: inline-block">
+                <li [ngClass]="{'selected': (star <= book.bookRating)}">
+                    <mat-icon>star_rate</mat-icon>
+                </li>
+            </ul>
+            <hr>
+            <read-more [text]="book.bookDescription" [maxLength]="200"></read-more>
+            <hr>
         </div>
     </div>
-    
- 
+
+
+
 </div>
 
+
+<div class="container" *ngIf="dataLoaded && authorBooks.length > 0">
+    More From Author :
+    <owl-carousel-o [options]="customOptions">
+
+        <ng-container *ngFor="let book of authorBooks">
+            <ng-template class="slide" carouselSlide [id]="book.id">
+
+                <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;">
+                <p class="wrap-book-title">
+                    {{book.bookTitle}}
+
+                </p>
+                <button mat-raised-button color="accent" class="book-button" (click)="viewBookDetail(book.bookId)"><span
+                        class="book-button">View Book Detail</span></button>
+
+            </ng-template>
+        </ng-container>
+
+    </owl-carousel-o>
+</div>
+
+<div class="container" *ngIf="dataLoaded && categoryBooksDto.books.length > 0">
+
+    <div class="row justify-content-between">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <h4 style="text-align: left"> Similar Books :</h4>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <button mat-button color="accent" (click)="seeAllBooksOfCategory()"> See All
+                {{categoryBooksDto.total_count}} books</button>
+        </div>
+    </div>
+
+
+
+
+    <owl-carousel-o [options]="customOptions">
+
+        <ng-container *ngFor="let book of categoryBooksDto.books">
+            <ng-template carouselSlide [id]="book.id" class="slide">
+
+                <mat-card style="max-width : 220px; height : 350px">
+                    <mat-card-content>
+                        <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 250px;">
+                        <p class="wrap-book-title">
+                            {{book.bookTitle}}
+
+                        </p>
+                        <button mat-raised-button color="accent" class="book-button"
+                            (click)="viewBookDetail(book.bookId)"><span class="book-button">View Book
+                                Detail</span></button>
+                    </mat-card-content>
+                </mat-card>
+            </ng-template>
+        </ng-container>
+
+    </owl-carousel-o>
+
+
+
+
+
+
+
+</div>

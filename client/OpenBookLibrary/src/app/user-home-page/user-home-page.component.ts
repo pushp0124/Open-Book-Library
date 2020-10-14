@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscriber, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-home-page',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserHomePageComponent implements OnInit {
 
-  constructor() { }
+ 
+  constructor(private router: Router, private route: ActivatedRoute) {
+
+  }
 
   ngOnInit() {
+   
   }
 
 }

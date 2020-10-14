@@ -23,7 +23,9 @@ select {
   }
 
   select:focus {
-      outline : 4px solid #ffc107
+    border-color: rgb(255, 193, 7);
+    box-shadow: 0 0 0 0.175rem rgba(255, 193, 7, 1.0);
+    outline : none;
   }
   
   /* CAUTION: IE hackery ahead */
@@ -38,8 +40,10 @@ select {
           padding: 5px\9;
       } 
   }
-  input:focus {
-    outline : 4px solid #ffc107
+  .form-control:focus {
+    border-color: rgb(255, 193, 7);
+    box-shadow: 0 0 0 0.175rem rgba(255, 193, 7, 1.0);
+    outline : none;
   }
 
  

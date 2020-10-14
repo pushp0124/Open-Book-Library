@@ -2,25 +2,51 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="devtools" key="selection"/>
-		<item value="false" key="casesensitive"/>
+		<item value="" key="selection"/>
+		<item value="true" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="devtools"/>
-			<item value="devtool"/>
-			<item value="capgemini.bookStore"/>
+			<item value="fine"/>
+			<item value="issue"/>
+			<item value="Passord"/>
+			<item value="passord"/>
+			<item value="@RequestParam"/>
+			<item value="search"/>
+			<item value="matter"/>
+			<item value="active"/>
+			<item value="ISSUED"/>
+			<item value="System.out.println("/>
+			<item value="sysout"/>
+			<item value="Issued"/>
+			<item value="issueBook"/>
+			<item value="issued"/>
+			<item value="issuedToUser"/>
 		</list>
 		<list key="replacehistory">
-			<item value="obl.demo"/>
+			<item value="borrow"/>
+			<item value="Password"/>
+			<item value="password"/>
+			<item value="BORROWED"/>
+			<item value=""/>
+			<item value="Borrowed"/>
+			<item value="bookTransaction"/>
+			<item value="borrowed"/>
+			<item value="bo"/>
+			<item value="borrowedBook"/>
+			<item value="BookTransaction"/>
+			<item value="borrowDate"/>
+			<item value="borrowBook"/>
+			<item value="BorrowedBooks"/>
+			<item value="borrowedBooks"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item value="294" key="DIALOG_WIDTH"/>
+		<item value="424" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
-		<item value="408" key="DIALOG_HEIGHT"/>
-		<item value="1133" key="DIALOG_X_ORIGIN"/>
-		<item value="116" key="DIALOG_Y_ORIGIN"/>
+		<item value="846" key="DIALOG_HEIGHT"/>
+		<item value="0" key="DIALOG_X_ORIGIN"/>
+		<item value="0" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

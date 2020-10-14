@@ -1,0 +1,92 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+        <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+        <strong>Error </strong>{{errorMessage}}
+    </div>
+    
+    <div class="alert alert-success" *ngIf="successMessage">
+        <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+        <strong>Success </strong> {{successMessage}}
+    </div>
+    
+<div class="mat-elevation-z8">
+    <div *ngIf="isLoadingResults || isRateLimitReached">
+        <mat-progress-bar *ngIf="isLoadingResults" color="accent" mode="indeterminate"></mat-progress-bar>
+        <div *ngIf="isRateLimitReached">
+            It is our fault, Please try again later!
+        </div>
+    </div>
+
+    <div>
+
+        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort
+            matSortActive="bookTitle" matSortDisableClear matSortDirection="asc">
+            <!-- Category Id Column -->
+            <ng-container matColumnDef="bookId">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">#</th>
+                <td cdk-cell style="color:black" *matCellDef="let row"><img [src]="row.bookImages[0]"
+                        style="max-width: 50px ;height : 50px;"></td>
+            </ng-container>
+
+            <!-- Category Name Column -->
+            <ng-container matColumnDef="bookTitle">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row" [matTooltip]="row.bookTitle">
+                    {{(row.bookTitle.length > 25) ? row.bookTitle.slice(0,25) + '...' : row.bookTitle}}
+                    <br><h6>Publisher :</h6> {{row.bookPublisher.publisherName}}<br> <h6>Author :</h6> {{row.bookAuthor.authorName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="bookCategory">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Category
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row" >
+                    {{row.bookCategory.category}}</td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="bookCopies">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Qty.
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookCopies}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="bookAvailableCopies">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Available
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookAvailableCopies}}</td>
+            </ng-container>
+            <ng-container matColumnDef="bookCost">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Price
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookCost}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="isAvailable">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Status
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">
+                    {{row.isAvailable ? 'AVAILABLE' : 'UNAVAILABLE'}}</td>
+            </ng-container>
+
+            <!-- Action  Column -->
+            <ng-container matColumnDef="action">
+                <th cdk-header-cell *matHeaderCellDef>
+                    Action
+                </th>
+                <td cdk-cell *matCellDef="let row">
+                    <button type="button" mat-raised-button class="my-books-action" color="accent" #tooltip="matTooltip"
+                        matTooltip="Edit Book" matTooltipPosition="below" (click)="updateBookDetail(row)"><mat-icon>create</mat-icon></button>
+                    <button type="button" mat-raised-button class="my-books-action" color="accent" #tooltip="matTooltip"
+                        [disabled]="!row.isAvailable && row.bookAvailableCopies == 0" matTooltip="Update Book Status"
+                        matTooltipPosition="below" (click)="changeBookStatus(row)">Toggle Book Status</button>
+                </td>
+            </ng-container>
+
+            <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr cdk-row *matRowDef="let row; columns: displayedColumns;" [style.backgroundColor]="!row.isAvailable ? 'lightpink' : 'white'"></tr>
+        </table>
+    </div>
+
+    <div *ngIf="!isLoadingResults && !isRateLimitReached && data.length === 0">No available books</div>
+    <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
+</div>

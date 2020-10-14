@@ -1,11 +1,11 @@
 
-<mat-card [ngStyle]="styleExpression" >
+<mat-card [ngStyle]="styleExpression" (click) = "cardFooterClicked()" class="my-card">
     <mat-card-content style="text-align:left">
         <h2>{{cardHeading}}</h2>
         <br>
         {{cardContent}}
     </mat-card-content>
-    <mat-card-footer style="opacity: 0.5"(click) = "cardFooterClicked()" >
-        {{cardFooterText}}
+    <mat-card-footer style="opacity: 0.5" >
+        {{cardFooterText}} 
     </mat-card-footer>
 </mat-card>

@@ -1,0 +1,33 @@
+<div class="back" style="overflow: hidden; text-align: center;">
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+        <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+        <strong>Error </strong>{{errorMessage}}
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+        <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+        <strong>Success </strong> {{successMessage}}
+    </div>
+</div>
+
+<form [formGroup]="categoryFormGroup">
+
+    <mat-form-field readonly appearance="outline" style="width: 100%">
+        <mat-label>Category Id</mat-label>
+        <input matInput formControlName="categoryIdCtrl" matinput="" placeholder="">
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Category Name</mat-label>
+        <input matInput formControlName="categoryCtrl" matinput="" placeholder="">
+        <mat-error *ngIf="categoryCtrl.hasError('required')">
+            Category Name is mandatory
+        </mat-error>
+
+    </mat-form-field>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="accent" [disabled]="!categoryFormGroup.valid"
+            (click)="updateCategory()">Update</button>
+        <button mat-raised-button color="accent" mat-dialog-close=true>Close</button>
+    </mat-dialog-actions>
+</form>

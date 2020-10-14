@@ -1,0 +1,19 @@
+.report-radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%
+  }
+  
+  .report-radio-button {
+    margin: 5px;
+  }
+  
+  .my-books-action {
+    margin : 10px;
+
+}
+.my-books-action:hover {
+    color: black;
+   
+}

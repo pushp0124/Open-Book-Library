@@ -12,55 +12,55 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.obl.book.models.common.User;
-import com.obl.book.models.enums.IssueBookStatus;
+import com.obl.book.models.enums.BookTransactionStatus;
 
 
 @Entity
-public class IssueBook {
+public class BookTransaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer issueId;
+	private Integer transactionId;
 	
 	@ManyToOne
-	private User issuedToUser;
+	private User borrowedToUser;
 	
 	
 	@Column(nullable = false)
-	private Date issueDate;
+	private Date borrowedDate;
 	
 	@Column(nullable = false)
 	private Date returnDate;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private IssueBookStatus bookStatus; 
+	private BookTransactionStatus bookStatus; 
 	
 	@ManyToOne
-	private Book issuedBook;
+	private Book borrowedBook;
 
-	public Integer getIssueId() {
-		return issueId;
+	public Integer getTransactionId() {
+		return transactionId;
 	}
 
-	public void setIssueId(Integer issueId) {
-		this.issueId = issueId;
+	public void setTransactionId(Integer transactionId) {
+		this.transactionId = transactionId;
 	}
 
-	public User getIssuedToUser() {
-		return issuedToUser;
+	public User getBorrowedToUser() {
+		return borrowedToUser;
 	}
 
-	public void setIssuedToUser(User issuedToUser) {
-		this.issuedToUser = issuedToUser;
+	public void setBorrowedToUser(User borrowedToUser) {
+		this.borrowedToUser = borrowedToUser;
 	}
 
-	public Date getIssueDate() {
-		return issueDate;
+	public Date getBorrowedDate() {
+		return borrowedDate;
 	}
 
-	public void setIssueDate(Date issueDate) {
-		this.issueDate = issueDate;
+	public void setBorrowedDate(Date borrowedDate) {
+		this.borrowedDate = borrowedDate;
 	}
 
 	public Date getReturnDate() {
@@ -71,26 +71,26 @@ public class IssueBook {
 		this.returnDate = returnDate;
 	}
 
-	public Book getIssuedBook() {
-		return issuedBook;
+	public Book getBorrowedBook() {
+		return borrowedBook;
 	}
 
-	public void setIssuedBook(Book issuedBook) {
-		this.issuedBook = issuedBook;
+	public void setBorrowedBook(Book borrowedBook) {
+		this.borrowedBook = borrowedBook;
 	}
 
-	public IssueBookStatus getBookStatus() {
+	public BookTransactionStatus getBookStatus() {
 		return bookStatus;
 	}
 
-	public void setBookStatus(IssueBookStatus bookStatus) {
+	public void setBookStatus(BookTransactionStatus bookStatus) {
 		this.bookStatus = bookStatus;
 	}
 
 	@Override
 	public String toString() {
-		return "IssueBook [issueId=" + issueId + ", issuedToUser=" + issuedToUser + ", issueDate=" + issueDate
-				+ ", returnDate=" + returnDate + ", bookStatus=" + bookStatus + ", issuedBook=" + issuedBook + "]";
+		return "IssueBook [transactionId=" + transactionId + ", borrowedToUser=" + borrowedToUser + ", borrowedDate=" + borrowedDate
+				+ ", returnDate=" + returnDate + ", bookStatus=" + bookStatus + ", borrowedBook=" + borrowedBook + "]";
 	}
 
 	

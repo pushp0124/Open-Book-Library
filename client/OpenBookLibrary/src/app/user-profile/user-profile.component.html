@@ -1,0 +1,220 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+    <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+    <strong>Error </strong>{{errorMessage}}
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+    <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+    <strong>Success </strong> {{successMessage}}
+</div>
+
+<div class="alert alert-info">
+    <strong>Info</strong> We will log you out, with respect to your any action of edit, for security reasons!
+</div>
+
+
+<mat-expansion-panel style=" border: solid #F0F0F0;border-radius: 5px;margin : 10px;"
+    [expanded]="isSecondExpansionPanelHidden" (opened)="isSecondExpansionPanelHidden = true"
+    (closed)="isSecondExpansionPanelHidden = false">
+    <mat-expansion-panel-header style="background-color: rgba(255, 105, 180, 0.5)">
+        <mat-panel-title style="color: black; font-size: 20px;">
+            Personal & Communication Information
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <br>
+    <br>
+    <mat-card style="text-align: center">
+
+
+        <button mat-button color="accent" (click)="toggleEdit()">{{personalInfoButtonText}} </button>
+
+        <form [formGroup]="profileFormGroup" *ngIf="profileFormGroup">
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput formControlName="nameCtrl" placeholder="Name">
+                <mat-error *ngIf="name.hasError('required')">
+                    This field is mandatory
+                </mat-error>
+                <mat-error *ngIf="name.hasError('pattern')">
+                    Only characters are allowed
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="addressCtrl" placeholder="#1, North Street, Delhi - 11">
+                <mat-error>{{address.error}} </mat-error>
+                <mat-error *ngIf="address.hasError('required')">
+                    This field is mandatory
+                </mat-error>
+                <mat-error *ngIf="address.hasError('pattern')">
+                    Address Invalid Format
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="emailCtrl" placeholder="Your Email" email>
+
+                <mat-error *ngIf="email.hasError('required')">
+                    This field is mandatory
+                </mat-error>
+                <mat-error *ngIf="email.hasError('email')">
+                    Not a valid email
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Phone Number</mat-label>
+                <span matPrefix>+91- &nbsp;</span>
+                <input matInput formControlName="phoneCtrl" placeholder="Your Phone Number" maxLength="10">
+                <mat-error *ngIf="phoneNo.hasError('required')">
+                    This field is mandatory
+                </mat-error>
+                <mat-error *ngIf="phoneNo.hasError('pattern')">
+                    Phone number is not valid
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="passwordCtrl">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="password.hasError('required')">
+                    Enter password
+                </mat-error>
+            </mat-form-field>
+            <br>
+
+            <button mat-raised-button color="accent" (click)="updateUserProfile(password)" style="width : 30%"
+                [disabled]="!profileFormGroup.valid"> Update </button>
+
+        </form>
+
+
+    </mat-card>
+</mat-expansion-panel>
+
+
+<mat-expansion-panel style=" border: solid #F0F0F0;border-radius: 5px;margin : 10px;"
+    [expanded]="!isSecondExpansionPanelHidden" (opened)="isSecondExpansionPanelHidden = false"
+    (closed)="isSecondExpansionPanelHidden = true">
+    <mat-expansion-panel-header style="background-color: rgba(255, 105, 180, 0.5)">
+        <mat-panel-title style="color: black; font-size: 20px;">
+            Change Password
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <br>
+    <br>
+    <mat-card style="text-align: center">
+
+        <mat-slide-toggle (change)="changed()" [checked]="isShowDetails">Show Password Details</mat-slide-toggle>
+        <br><br>
+        <form [formGroup]="changePasswordFormGroup">
+
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Current Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="oldPasswordCtrl">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="old_password.hasError('required')">
+                    Enter password
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" [color]="passwordComponent.color" style="width : 100%">
+                <mat-label>New Password</mat-label>
+
+                <input matInput #passwordTextField required placeholder="Password" [type]="hide ? 'password' : 'text'"
+                    (change)="onPasswordChange()" formControlName="newPasswordCtrl" [maxLength]="passwordComponent.max">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-hint align="end" aria-live="polite">
+                    {{new_password.value.length}} / {{passwordComponent.max}}
+                </mat-hint>
+                <mat-error *ngIf="new_password.hasError('required')">
+                    This field should not be empty
+                </mat-error>
+                <mat-error *ngIf="new_password.hasError('pattern')">
+                    Password is not valid
+                </mat-error>
+            </mat-form-field>
+            <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
+                [password]="passwordTextField.value">
+            </mat-password-strength>
+            <mat-password-strength-info *ngIf="isShowDetails"
+                lowerCaseCriteriaMsg="Contains at least one lowercase character"
+                upperCaseCriteriaMsg="Contains at least one uppercase character"
+                digitsCriteriaMsg="Contains at least one digit character"
+                specialCharsCriteriaMsg="Contains at least one special character"
+                minCharsCriteriaMsg="Contains at least 8 character" [passwordComponent]="passwordComponent">
+            </mat-password-strength-info>
+
+
+            <br>
+
+            <mat-form-field appearance="outline" style="width : 100%">
+                <mat-label>Confirm password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" (change)="onPasswordChange()"
+                    formControlName="confirmPasswordCtrl" [maxLength]="passwordComponent.max">
+                <mat-hint align="end" aria-live="polite">
+                    {{confirm_password.value.length}} / {{passwordComponent.max}}
+                </mat-hint>
+                <mat-error *ngIf="confirm_password.hasError('mismatch')">
+                    Passwords don't match
+                </mat-error>
+
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <br>
+            <button mat-raised-button color="accent" (click)="changePassword()" style="width : 30%"
+                [disabled]="!changePasswordFormGroup.valid"> Change Password </button>
+        </form>
+    </mat-card>
+</mat-expansion-panel>
+
+<div style="text-align: left">
+
+    <ul style="list-style-type: none">
+        <li>
+            <h6>FAQs</h6>
+        </li>
+        <li>
+            <span style="font-weight: bold">What happens when I update my email address (or mobile number)?</span>
+            <br>
+            Your login email id (or mobile number) changes, likewise. You'll receive all your account related
+            communication
+            on your updated email address (or mobile number).
+            <br>
+        </li>
+        <li>
+            <span style="font-weight: bold">When will my account be updated with the new email address (or mobile
+                number)?</span>
+            <br>
+            It happens as soon as you confirm the verification code sent to your email (or mobile) and save the changes.
+            What happens to my existing account when I update my email address (or mobile number)?
+            Updating your email address (or mobile number) doesn't invalidate your account. Your account remains fully
+            functional.
+            <br>
+            You'll continue seeing your Borrow history, saved information and personal details.
+            <br>
+        </li>
+
+
+    </ul>
+
+</div>
+
+<img src="./assets/myProfileFooter.png" style="bottom:0px ; width : 100%; height : 150px">

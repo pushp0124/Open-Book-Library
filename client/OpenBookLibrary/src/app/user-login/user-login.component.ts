@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { LibraryAuthService } from '../auth-service';
+import { AuthRequest } from '../model/authRequest';
+import { User } from '../model/user';
 
 @Component({
   selector: 'app-user-login',
@@ -33,20 +35,31 @@ export class UserLoginComponent implements OnInit {
    
     this.buttonTxt = "Logging you In ..."
     this.isLoggingIn = true
-    this.authService.loginUser(this.emailCtrl.value, this.passwordCtrl.value).subscribe(employee => {
-      this.authService.loggedInUser = employee;
-      this.authService.loggedIn.next(true);
+
+    let authRequest = new AuthRequest();
+    authRequest.username = this.emailCtrl.value
+    authRequest.password = this.passwordCtrl.value
+    this.authService.loginUser(authRequest).subscribe(authResponse => {
      
-      if(employee.isAdmin) {
+      this.authService.loggedIn.next(true);
+      this.authService.saveAuthResponse(authResponse);
+      let isAdmin = false
+       authResponse.loggedInUserRoles.forEach(role => {
+          if(role.name == 'ROLE_ADMIN') {
+            isAdmin = true
+            
+          }
+      });
+      if(isAdmin) {
         this.router.navigate(['./adminhomepage'])
       } else {
-        this.router.navigate(['./userhomepage'])
+        this.router.navigate(['./catalog/0'])
       }
       
     }, (loginError) => { 
       this.buttonTxt = "Log In!"
       this.isLoggingIn = false;
-      this.errorMessage = loginError.error.message; 
+      this.errorMessage = loginError; 
 
     }
     )

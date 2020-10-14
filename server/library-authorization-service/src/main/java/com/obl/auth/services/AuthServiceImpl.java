@@ -39,8 +39,8 @@ public class AuthServiceImpl implements AuthService {
 			Optional<User> optionalUser = userRepo.findByMailId(mailId);
 			if (optionalUser.isPresent()) {
 				User user = optionalUser.get();
-				String hashUserPassword = HashAlgorithmService.hashedPassword(password, user.getSaltArray());
-				if (hashUserPassword.equals(user.getHashedPassword())) {
+//				String hashUserPassword = HashAlgorithmService.hashedPassword(password, user.getSaltArray());
+				if (password.equals(user.getPassword())) {
 					return userRepo.findByMailId(mailId).get();
 
 				}
@@ -69,10 +69,10 @@ public class AuthServiceImpl implements AuthService {
 				throw new OpenBookLibraryException("Account with phone No already exists");
 			}
 
-			byte[] salt = HashAlgorithmService.createSalt();
-			String hashedPassword = HashAlgorithmService.hashedPassword(password, salt);
-			user.setHashedPassword(hashedPassword);
-			user.setSaltArray(salt);
+//			byte[] salt = HashAlgorithmService.createSalt();
+//			String hashedPassword = HashAlgorithmService.hashedPassword(password, salt);
+			user.setPassword(password);
+//			user.setSaltArray(salt);
 
 			user = userRepo.save(user);
 
@@ -97,12 +97,14 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 	public String issueToken(String mailId) throws OpenBookLibraryException{
-		User user = AuthUtility.utilityObject.getUserFromMailId(mailId, userRepo);
-		Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
-		LoggedInUser loggedInUser = new LoggedInUser(user.getUserEmail(), user.getUserName() , user.getIsAdmin(),currentTimeStamp);
-		String key = generateAuthToken();
-		authTokenMap.put(key, loggedInUser);
-		return key;
+//		User user = AuthUtility.utilityObject.getUserFromMailId(mailId, userRepo);
+//		Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+//		LoggedInUser loggedInUser = new LoggedInUser(user.getUserEmail(), user.getUserName() , user.getIsAdmin(),currentTimeStamp);
+//		String key = generateAuthToken();
+//		authTokenMap.put(key, loggedInUser);
+//		return key;
+		
+		return null;
 
 	}
 

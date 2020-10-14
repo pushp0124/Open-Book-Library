@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/fo
 import { Router } from '@angular/router';
 import { User } from '../model/user';
 import { LibraryAuthService } from '../auth-service';
+import { Role } from '../model/role';
 
 @Component({
   selector: 'app-sign-up',
@@ -30,8 +31,8 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {
     
     this.firstFormGroup = this._formBuilder.group({
-      firstNameCtrl: ['', [Validators.required,  Validators.pattern('^[a-zA-Z ]*$')]],
-      lastNameCtrl: ['', [Validators.required,  Validators.pattern('^[a-zA-Z ]*$')]],
+      firstNameCtrl: ['', [Validators.required,  Validators.pattern('^[0-9a-zA-Z ]*$')]],
+      lastNameCtrl: ['', [Validators.required,  Validators.pattern('^[0-9a-zA-Z ]*$')]],
       addressCtrl : ['', [Validators.required, Validators.pattern("^[#.0-9a-zA-Z\s,-]+$")]]
 
     });
@@ -50,25 +51,34 @@ export class SignUpComponent implements OnInit {
 
   registerEmployee() {
       //get the current route path
+
+      let roles = [];
+     
       this.buttonTxt = "Registering ..."
       this.isRegistering = true
       let currentUrl = this.router.url
       let arrayOfUrls = currentUrl.split("/");
-      if(arrayOfUrls[arrayOfUrls.length - 1] == 'adminSignup') {
+      if(arrayOfUrls[arrayOfUrls.length - 1] == 'adminsignup') {
           this.isAdminSignUp = true;
       }
-      let user = new User(null,this.email.value,this.fName.value + " " + this.lName.value,this.phoneNo.value,this.address.value,this.isAdminSignUp,null);     
-       this.authService.registerUser(user,this.password.value).subscribe((employeeId) => {
-        user.userId = employeeId;
-        this.authService.loggedInUser = user;
-        this.authService.loggedIn.next(true);
-        if(user.isAdmin) {
-          this.router.navigate(['./adminhomepage'])
-        } else {
-          this.router.navigate(['./userhomepage'])
-        }   
-      }, (loginError) => {
-          this.errorMessage = loginError.error.message;  
+
+      if(this.isAdminSignUp) {
+        roles.push(new Role('ROLE_ADMIN'))
+      } else {
+        roles.push(new Role('ROLE_USER'))
+      }
+      
+      let user = new User(null,this.email.value,this.fName.value + " " + this.lName.value,this.phoneNo.value,this.address.value,this.password.value, roles);
+      console.log(user); 
+       this.authService.registerUser(user).subscribe((employee) => {
+          this.successMessage = "We have all your details safe, please access your mail for its verification";
+          this.isRegistering = false
+          this.buttonTxt = "Register"
+          this.thirdFormGroup.disable();
+
+
+      }, (registerError) => {
+          this.errorMessage = registerError;  
           this.buttonTxt = "Register"
           this.isRegistering = false
       })

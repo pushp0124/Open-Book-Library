@@ -1,93 +1,77 @@
+<div class="alert alert-danger" *ngIf="errorMessage">
+    <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+    <strong>Error </strong>{{errorMessage}}
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+    <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+    <strong>Success </strong> {{successMessage}}
+</div>
 <div class="container">
 
     <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <app-admin-card-action
-            [styleExpression] = "{'background-color' : 'skyblue', 'color':'white'}"
-            [cardHeading] = "'10'"
-            [cardContent] = "'Books'"
-            [cardFooterText] = "'More Info'"
-            [cardIndex] = "0"
-            (cardAction) = "cardFooterClicked($event)"
-            ></app-admin-card-action>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <app-admin-card-action [styleExpression]="{'background-color' : 'skyblue', 'color':'white'}"
+                [cardHeading]="inventoryReport && inventoryReport.totalBooks" [cardContent]="'Books'"
+                [cardFooterText]="'More Info'" [cardIndex]="0" (cardAction)="onCardClicked($event)">
+            </app-admin-card-action>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <app-admin-card-action
-                [styleExpression] = "{'background-color' : 'rgb(140, 212, 23)', 'color':'white'}"
-                [cardHeading] = "'17'"
-                [cardContent] = "'Borrowed Books'"
-                [cardFooterText] = "'More Info'"
-                [cardIndex] = "1"
-                (cardAction) = "cardFooterClicked($event)"
-                ></app-admin-card-action>
-           
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <app-admin-card-action [styleExpression]="{'background-color' : 'rgb(140, 212, 23)', 'color':'white'}"
+                [cardHeading]="inventoryReport && inventoryReport.borrowedBooks" [cardContent]="'Borrowed Books'"
+                [cardFooterText]="'More Info'" [cardIndex]="1" (cardAction)="onCardClicked($event)">
+            </app-admin-card-action>
+
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <app-admin-card-action
-                [styleExpression] = "{'background-color' : 'rgb(255, 102, 0)', 'color':'white'}"
-                [cardHeading] = "'Return'"
-                [cardContent] = "'Book'"
-                [cardFooterText] = "'Return'"
-                [cardIndex] = "2"
-                (cardAction) = "cardFooterClicked($event)"
-                ></app-admin-card-action>
-           
-        </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <app-admin-card-action
-                [styleExpression] = "{'background-color' : 'rgb(255, 102, 0)', 'color':'white'}"
-                [cardHeading] = "'Issue'"
-                [cardContent] = "'Book'"
-                [cardFooterText] = "'Issue'"
-                [cardIndex] = "3"
-                (cardAction) = "cardFooterClicked($event)"
-                ></app-admin-card-action>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <app-admin-card-action [styleExpression]="{'background-color' : 'rgb(255, 102, 0)', 'color':'white'}"
+                [cardHeading]="'Return'" [cardContent]="'Book'" [cardFooterText]="'Return'" [cardIndex]="2"
+                (cardAction)="onCardClicked($event)"></app-admin-card-action>
+
         </div>
     </div>
 </div>
 
 
 
-<div class="mat-elevation-z8">
-    <div *ngIf="isLoadingResults || isRateLimitReached">
-        <mat-progress-bar *ngIf="isLoadingResults" color="accent"></mat-progress-bar>
-        <div *ngIf="isRateLimitReached">
+<div class="mat-elevation-z8" style="margin-top: 50px">
+    <h4>Today Dues </h4>
+    <div *ngIf="isLoadingResults1 || isRateLimitReached1">
+        <mat-progress-bar *ngIf="isLoadingResults1" color="accent"></mat-progress-bar>
+        <div *ngIf="isRateLimitReached1">
             It is our fault, Please try again later!
         </div>
     </div>
 
     <div>
 
-        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort
+        <table cdk-table [dataSource]="firstData" class="table table-hover table-dark table-bordered" matSort
             matSortActive="returnDate" matSortDisableClear matSortDirection="desc">
             <!-- Book Title Column -->
-            <ng-container matColumnDef="issuedBook.bookTitle">
+            <ng-container matColumnDef="borrowedBook.bookTitle">
                 <th cdk-header-cell class="wrap-book-title" *matHeaderCellDef mat-sort-header disableClear
                     class="hide-arrow">Book Title</th>
                 <td cdk-cell style="color:black" *matCellDef="let row" #tooltip="matTooltip"
-                    [matTooltip]="row.issuedBook.bookTitle" matTooltipPosition="below">
-                    {{ (row.issuedBook.bookTitle.length > 15) ? row.issuedBook.bookTitle.slice(0,15) + '...' : row.issuedBook.bookTitle}}
+                    [matTooltip]="row.borrowedBook.bookTitle" matTooltipPosition="below">
+                    {{ (row.borrowedBook.bookTitle.length > 15) ? row.borrowedBook.bookTitle.slice(0,15) + '...' : row.borrowedBook.bookTitle}}
                 </td>
             </ng-container>
 
             <!-- Book Author Column -->
-            <ng-container matColumnDef="issuedBook.bookAuthor.authorName">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Author</th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issuedBook.bookAuthor.authorName}}</td>
+            <ng-container matColumnDef="borrowedToUser.userEmail">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Borrower Email
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedToUser.userEmail}}</td>
             </ng-container>
 
-            <!-- Book Category Column -->
-            <ng-container matColumnDef="issuedBook.bookCategory.category">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Category</th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issuedBook.bookCategory.category}}</td>
-            </ng-container>
+
 
             <!-- Book Issue Date Column -->
-            <ng-container matColumnDef="issueDate">
+            <ng-container matColumnDef="borrowedDate">
                 <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
                     Issuing Date
                 </th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issueDate | date:'mediumDate' }}</td>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedDate | date:'mediumDate' }}</td>
             </ng-container>
 
             <!-- Book Return Date Column -->
@@ -98,71 +82,64 @@
                 <td cdk-cell style="color : black" *matCellDef="let row">{{row.returnDate | date: 'mediumDate'}}</td>
             </ng-container>
 
-            <!-- Action  Column -->
-            <ng-container matColumnDef="actions">
-                <th cdk-header-cell *matHeaderCellDef>
-                    Actions
+            <ng-container matColumnDef="borrowedToUser.userPhoneNo">
+                <th cdk-header-cell *matHeaderCellDef disableClear class="hide-arrow">
+                    Contact
                 </th>
-                <td cdk-cell *matCellDef="let row">
-                    <button type="button" mat-raised-button class="my-books-action" color="accent" #tooltip="matTooltip"
-                        matTooltip="View Book Detail" matTooltipPosition="below" (click)="viewBookDetail(row)"><i
-                            class="material-icons">visibility</i></button>
-                    <button mat-raised-button [class.my-books-action:hover]="row.bookStatus=='ISSUED'" color="accent"
-                        #tooltip="matTooltip" matTooltip="Re-Issue Book" matTooltipPosition="below"
-                        [disabled]="row.bookStatus == 'ISSUED'" (click)="reIssueBook(row)"><i
-                            class="material-icons">autorenew</i></button>
-                </td>
+                <td cdk-cell style="color : black" *matCellDef="let row">
+                    {{row.borrowedToUser.userPhoneNo}}</td>
             </ng-container>
 
+
+
             <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr cdk-row *matRowDef="let row; columns: displayedColumns;"
-                [style.background-color]="row.bookStatus=='ISSUED' ? 'lightpink' : 'white'"></tr>
+            <tr cdk-row *matRowDef="let row; columns: displayedColumns;" [style.background-color]="'white'"></tr>
+            
         </table>
     </div>
 
+    <div *ngIf="!isLoadingResults1 && !isRateLimitReached1 && firstData.length === 0">No dues for today</div>
     <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
 </div>
 
-<div class="mat-elevation-z8">
-    <div *ngIf="isLoadingResults || isRateLimitReached">
-        <mat-progress-bar *ngIf="isLoadingResults" color="accent"></mat-progress-bar>
-        <div *ngIf="isRateLimitReached">
+<div class="mat-elevation-z8" style="margin-top: 50px">
+    <h4>Tomorrow Dues</h4>
+    <div *ngIf="isLoadingResults2 || isRateLimitReached2">
+        <mat-progress-bar *ngIf="isLoadingResults2" color="accent"></mat-progress-bar>
+        <div *ngIf="isRateLimitReached2">
             It is our fault, Please try again later!
         </div>
     </div>
 
     <div>
 
-        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort
+        <table cdk-table [dataSource]="secondData" class="table table-hover table-dark table-bordered" matSort
             matSortActive="returnDate" matSortDisableClear matSortDirection="desc">
             <!-- Book Title Column -->
-            <ng-container matColumnDef="issuedBook.bookTitle">
+            <ng-container matColumnDef="borrowedBook.bookTitle">
                 <th cdk-header-cell class="wrap-book-title" *matHeaderCellDef mat-sort-header disableClear
                     class="hide-arrow">Book Title</th>
                 <td cdk-cell style="color:black" *matCellDef="let row" #tooltip="matTooltip"
-                    [matTooltip]="row.issuedBook.bookTitle" matTooltipPosition="below">
-                    {{ (row.issuedBook.bookTitle.length > 15) ? row.issuedBook.bookTitle.slice(0,15) + '...' : row.issuedBook.bookTitle}}
+                    [matTooltip]="row.borrowedBook.bookTitle" matTooltipPosition="below">
+                    {{ (row.borrowedBook.bookTitle.length > 15) ? row.borrowedBook.bookTitle.slice(0,15) + '...' : row.borrowedBook.bookTitle}}
                 </td>
             </ng-container>
 
             <!-- Book Author Column -->
-            <ng-container matColumnDef="issuedBook.bookAuthor.authorName">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Author</th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issuedBook.bookAuthor.authorName}}</td>
+            <ng-container matColumnDef="borrowedToUser.userEmail">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Borrower Email
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedToUser.userEmail}}</td>
             </ng-container>
 
-            <!-- Book Category Column -->
-            <ng-container matColumnDef="issuedBook.bookCategory.category">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Category</th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issuedBook.bookCategory.category}}</td>
-            </ng-container>
+
 
             <!-- Book Issue Date Column -->
-            <ng-container matColumnDef="issueDate">
+            <ng-container matColumnDef="borrowedDate">
                 <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
                     Issuing Date
                 </th>
-                <td cdk-cell style="color : black" *matCellDef="let row">{{row.issueDate | date:'mediumDate' }}</td>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedDate | date:'mediumDate' }}</td>
             </ng-container>
 
             <!-- Book Return Date Column -->
@@ -173,44 +150,40 @@
                 <td cdk-cell style="color : black" *matCellDef="let row">{{row.returnDate | date: 'mediumDate'}}</td>
             </ng-container>
 
-            <!-- Action  Column -->
-            <ng-container matColumnDef="actions">
-                <th cdk-header-cell *matHeaderCellDef>
-                    Actions
+            <ng-container matColumnDef="borrowedToUser.userPhoneNo">
+                <th cdk-header-cell *matHeaderCellDef disableClear class="hide-arrow">
+                    Contact
                 </th>
-                <td cdk-cell *matCellDef="let row">
-                    <button type="button" mat-raised-button class="my-books-action" color="accent" #tooltip="matTooltip"
-                        matTooltip="View Book Detail" matTooltipPosition="below" (click)="viewBookDetail(row)"><i
-                            class="material-icons">visibility</i></button>
-                    <button mat-raised-button [class.my-books-action:hover]="row.bookStatus=='ISSUED'" color="accent"
-                        #tooltip="matTooltip" matTooltip="Re-Issue Book" matTooltipPosition="below"
-                        [disabled]="row.bookStatus == 'ISSUED'" (click)="reIssueBook(row)"><i
-                            class="material-icons">autorenew</i></button>
-                </td>
+                <td cdk-cell style="color : black" *matCellDef="let row">
+                    {{row.borrowedToUser.userPhoneNo | date: 'mediumDate'}}</td>
             </ng-container>
 
+           
+
             <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr cdk-row *matRowDef="let row; columns: displayedColumns;"
-                [style.background-color]="row.bookStatus=='ISSUED' ? 'lightpink' : 'white'"></tr>
+            <tr cdk-row *matRowDef="let row; columns: displayedColumns;" [style.background-color]="'white'"></tr>
+           
         </table>
+        <div *ngIf="!isLoadingResults2 && !isRateLimitReached2 && secondData.length === 0">No dues for tomorrow</div>
     </div>
 
     <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
 </div>
 
 
-<div class="container">
+<div class="container" style="margin-top: 50px;">
 
     <div class="row">
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <div class="col-xs-7 col-sm-7 col-md-8 col-lg-7">
             <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-                [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+                [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType" [colors]="chartColors">
             </canvas>
 
         </div>
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType">
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+                [colors]="doughnutChartColors" style="height: 100%;" [options]="doughnutChartOptions">
             </canvas>
 
 

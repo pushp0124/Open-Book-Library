@@ -6,3 +6,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-sort-header-arrow {
     color: #fff !important;
 }
+
+.custom-date-class {
+    background: orange !important;
+    border-radius: 100%;
+    color : black;
+  }
+
+  .hide { display: none; }

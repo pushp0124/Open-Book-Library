@@ -1,0 +1,45 @@
+<div class="back" style="overflow: hidden; text-align: center;">
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+        <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+        <strong>Error </strong>{{errorMessage}}
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+        <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+        <strong>Success </strong> {{successMessage}}
+    </div>
+</div>
+
+
+<mat-dialog-content>
+    <p>User Email Id : {{userEmailId}} </p>
+    <p>Lost Books Count : {{lostBooksCount}} </p>
+    <p>Lost Books Cost : {{lostBooksCost}}</p>
+    
+    <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Book Author</th>
+                <th>Book Cost</th>
+                <th>Book Borrowed Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let issueBook of borrowedBooks">
+                <td>{{issueBook.borrowedBook.bookTitle}}</td>
+                <td>{{issueBook.borrowedBook.bookAuthor.authorName}}</td>
+                <td>{{issueBook.borrowedBook.bookCost}}</td>
+                <td>{{issueBook.borrowedDate}}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+  </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="accent"
+      mat-dialog-close=true (click) = "disableUser()">Disable User</button>
+    <button mat-raised-button color="accent" mat-dialog-close=true>Close</button>
+  </mat-dialog-actions>

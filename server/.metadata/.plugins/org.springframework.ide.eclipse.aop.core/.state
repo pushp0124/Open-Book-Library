@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aop-reference-model>
-<aop-project name="library-service-discovery"/>
+<aop-project name="library-gateway-security"/>
+<aop-project name="library-eureka-service-discovery"/>
 <aop-project name="library-book-service"/>
+<aop-project name="library-mail-service"/>
 <aop-project name="library-authorization-service"/>
 </aop-reference-model>

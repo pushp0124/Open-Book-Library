@@ -8,23 +8,44 @@
     <strong>Success </strong> {{successMessage}}
 </div>
 
+
+<div class="container">
+    <div class="row justify-content-between">
+
+        <!-- <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <h3 *ngIf="selectedBookCategoryId != 0 && books.length > 0"> {{books[0].bookCategory.category}}</h3>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <span *ngIf="searchModel.searchText != undefined"> Search Result(s) : {{book.length}}</span>
+        </div> -->
+
+    </div>
+</div>
+
+
 <div class="container my-container">
 
     <div class="row justify-content-start">
         <div class="col-sm-6 col-md-3 col-lg-3" *ngFor="let book of books; let i = index;">
             <mat-card class="column my-column">
                 <mat-card-content>
-                    <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;">
+                    <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;" *ngIf="book.isAvailable">
+                    <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;opacity : 0.2" *ngIf="!book.isAvailable">
+                    <span *ngIf="!book.isAvailable" class="centered">Not Available</span>
                     <p class="wrap-book-title">
                         {{book.bookTitle}}
-
                     </p>
-
-
-
-                    <button mat-raised-button color="accent" *ngIf="book.isAvailable" class = "book-button"(click)="viewBookDetail(i)"><span class="book-button">View
-                        Book Detail</span></button>
-                    <button mat-raised-button color="accent" class = "book-button" disabled *ngIf="!book.isAvailable">Not Available</button>
+                    <p class="wrap-book-title" style="color : grey">
+                        {{book.bookAuthor.authorName}}
+                    </p>
+                    <ul class="list-inline rating-list" *ngFor="let star of stars" style="display: inline-block">
+                        <li [ngClass]="{'selected': (star <= book.bookRating)}">
+                            <mat-icon>star_rate</mat-icon>
+                        </li>
+                    </ul>
+                    <button mat-raised-button color="accent" class="book-button" (click)="viewBookDetail(i)"><span
+                            class="book-button">View
+                            Book Detail</span></button>
 
                 </mat-card-content>
             </mat-card>
@@ -48,9 +69,9 @@
 </div> -->
 
 
-<!-- <section title="Issued Books">
+<!-- <section title="Borrowed Books">
     <mat-grid-list cols="3">
-      <mat-grid-tile *ngFor="let book of issuedBooks; let i = index;" style="margin : 5px; margin-bottom: 30px;">
+      <mat-grid-tile *ngFor="let book of borrowedBooks; let i = index;" style="margin : 5px; margin-bottom: 30px;">
 
           <mat-card style="width:90% ;height: 100% padding">
 
@@ -63,7 +84,7 @@
                   <p>
                    {{book.bookTitle}}
                   </p>
-                  <button mat-raised-button color="accent" disabled >Already Issued To You</button>
+                  <button mat-raised-button color="accent" disabled >Already Borrowed To You</button>
               </mat-card-content>
               
 

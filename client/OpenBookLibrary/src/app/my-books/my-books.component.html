@@ -8,116 +8,98 @@
     <strong>Success </strong> {{successMessage}}
 </div>
 
-<!-- <mat-form-field>
-    <mat-label>Select Row for Sorting</mat-label>
-    <mat-select [(value)]="selectedRow" (selectionChange)="rowSelectionListClicked($event.value)">
-        <mat-option *ngFor="let row of tableHeaders;let i = index" [value]="i"> {{row}}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-<div class="table-responsive">
-    <table class="table table-hover table-bordered my-books-table">
-        <thead class="thead-dark">
-            <tr>
-                <ng-container *ngFor="let tableHeader of tableHeaders; let i = index;">
-                    <th [class.headerSortUp]="i == selectedRow && !tableHeaderIsShowDown"
-                        [class.headerSortDown]="i == selectedRow && tableHeaderIsShowDown" (click)="headerClicked(i)">{{tableHeader}}
-                    </th>
-                </ng-container>
-
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody class="thead-light">
-            <tr *ngFor="let issueBook of issuedBooks; let i = index;"
-                [style.background-color]="issueBook.returnDate!=undefined ? 'white' : 'lightpink'">
-
-                <td class="wrap-book-title"   #tooltip="matTooltip" [matTooltip]="issueBook.issuedBook.bookTitle" matTooltipPosition="below"> {{issueBook.issuedBook.bookTitle}}</td>
-                <td> {{issueBook.issuedBook.bookAuthor.authorName}}</td>
-                <td> {{issueBook.issuedBook.bookCategory.category}}</td>
-                <td> {{issueBook.issueDate | date:'mediumDate'}}</td>
-                <td *ngIf="issueBook.returnDate == undefined"> {{issueBook.expectedReturnDate | date:'mediumDate'}}</td>
-                <td *ngIf="issueBook.returnDate != undefined"> {{issueBook.returnDate | date:'mediumDate'}}</td>
-                <td> <button type="button" mat-raised-button class="my-books-action" color="accent"
-                        #tooltip="matTooltip" matTooltip="View Book Detail" matTooltipPosition="below"
-                        (click)="viewBookDetail(i)"><i class="material-icons">visibility</i></button>
-                    <button mat-raised-button [class.my-books-action:hover]="'true'" color="accent"
-                        #tooltip="matTooltip" matTooltip="Re-Issue Book" matTooltipPosition="below"
-                        [disabled]="issueBook.returnDate == undefined" (click)="reIssueBook(i)"><i
-                            class="material-icons">autorenew</i></button>
-                </td>
-            </tr>
-        </tbody>
-    </table> -->
-
-
 
 <div class="mat-elevation-z8">
-    <div  *ngIf="isLoadingResults || isRateLimitReached" mode="indeterminate">
+    <div *ngIf="isLoadingResults || isRateLimitReached" mode="indeterminate">
         <mat-progress-bar *ngIf="isLoadingResults" color="accent"></mat-progress-bar>
-        <div  *ngIf="isRateLimitReached">
-           It is our fault, Please try again later!
+        <div *ngIf="isRateLimitReached">
+            It is our fault, Please try again later!
         </div>
     </div>
 
     <div>
 
-        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort matSortActive="returnDate"   matSortDisableClear
-            matSortDirection="desc">
+        <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort
+            matSortActive="returnDate" matSortDisableClear matSortDirection="desc">
             <!-- Book Title Column -->
-            <ng-container matColumnDef="issuedBook.bookTitle">
-                <th cdk-header-cell class="wrap-book-title" *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">Book Title</th>
-                <td cdk-cell style = "color:black" *matCellDef="let row"  #tooltip="matTooltip" [matTooltip]="row.issuedBook.bookTitle" matTooltipPosition="below">{{ (row.issuedBook.bookTitle.length > 15) ? row.issuedBook.bookTitle.slice(0,15) + '...' : row.issuedBook.bookTitle}}</td>
+            <ng-container matColumnDef="borrowedBook.bookTitle">
+                <th cdk-header-cell class="wrap-book-title" *matHeaderCellDef mat-sort-header disableClear
+                    class="hide-arrow">Book Title</th>
+                <td cdk-cell style="color:black" *matCellDef="let row" #tooltip="matTooltip"
+                    [matTooltip]="row.borrowedBook.bookTitle" matTooltipPosition="below">
+                    {{ (row.borrowedBook.bookTitle.length > 15) ? row.borrowedBook.bookTitle.slice(0,15) + '...' : row.borrowedBook.bookTitle}}
+                </td>
             </ng-container>
 
             <!-- Book Author Column -->
-            <ng-container matColumnDef="issuedBook.bookAuthor.authorName">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">Book Author</th>
-                <td cdk-cell style = "color : black" *matCellDef="let row">{{row.issuedBook.bookAuthor.authorName}}</td>
+            <ng-container matColumnDef="borrowedBook.bookAuthor.authorName">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Author</th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedBook.bookAuthor.authorName}}</td>
             </ng-container>
 
             <!-- Book Category Column -->
-            <ng-container matColumnDef="issuedBook.bookCategory.category">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">Book Category</th>
-                <td cdk-cell style = "color : black" *matCellDef="let row">{{row.issuedBook.bookCategory.category}}</td>
+            <ng-container matColumnDef="borrowedBook.bookCategory.category">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Category</th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedBook.bookCategory.category}}</td>
             </ng-container>
 
             <!-- Book Issue Date Column -->
-            <ng-container matColumnDef="issueDate">
-                <th cdk-header-cell  *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">
-                    Issuing Date
+            <ng-container matColumnDef="borrowedDate">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
+                    Borrow Date
                 </th>
-                <td cdk-cell style = "color : black" *matCellDef="let row">{{row.issueDate | date:'mediumDate' }}</td>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedDate | date:'mediumDate' }}</td>
             </ng-container>
 
             <!-- Book Return Date Column -->
             <ng-container matColumnDef="returnDate">
-                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear  class="hide-arrow">
-                   Return Date
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
+                    Return Date
                 </th>
-                <td cdk-cell style = "color : black" *matCellDef="let row">{{row.returnDate | date: 'mediumDate'}}</td>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.returnDate | date: 'mediumDate'}}</td>
             </ng-container>
 
+
+            <!-- Book Status Column -->
+            <ng-container matColumnDef="bookStatus">
+                <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
+                    Borrow Status
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookStatus}}</td>
+            </ng-container>
+
+
+            <!-- Book Return Date Column -->
+            <ng-container matColumnDef="fineTillDate">
+                <th cdk-header-cell *matHeaderCellDef disableClear class="hide-arrow">
+                    Fine(in Rs)
+                </th>
+                <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookStatus == 'BORROWED' ? row.fineTillDate : 'NA'}}</td>
+            </ng-container>
+
+
             <!-- Action  Column -->
-            <ng-container   matColumnDef="actions">
+            <ng-container matColumnDef="actions">
                 <th cdk-header-cell *matHeaderCellDef>
                     Actions
                 </th>
                 <td cdk-cell *matCellDef="let row">
-                        <button type="button" mat-raised-button class="my-books-action" color="accent"
-                        #tooltip="matTooltip" matTooltip="View Book Detail" matTooltipPosition="below"
-                        (click)="viewBookDetail(row)"><i class="material-icons">visibility</i></button>
+                    <button type="button" mat-raised-button class="my-books-action" color="accent" #tooltip="matTooltip"
+                        matTooltip="View Book Detail" matTooltipPosition="below" (click)="viewBookDetail(row)"><mat-icon>visibility</mat-icon></button>
                     <button mat-raised-button [class.my-books-action:hover]="row.bookStatus=='ISSUED'" color="accent"
                         #tooltip="matTooltip" matTooltip="Re-Issue Book" matTooltipPosition="below"
-                        [disabled]="row.bookStatus == 'ISSUED'" (click)="reIssueBook(row)"><i
-                            class="material-icons">autorenew</i></button>
+                        [disabled]="row.bookStatus == 'BORROWED'" (click)="reIssueBook(row)"><mat-icon>autorenew</mat-icon></button>
                 </td>
             </ng-container>
 
             <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr cdk-row *matRowDef="let row; columns: displayedColumns;"  [style.background-color]="row.bookStatus=='ISSUED' ? 'lightpink' : 'white'"></tr>
+            <tr cdk-row *matRowDef="let row; columns: displayedColumns;"
+                [style.background-color]="row.bookStatus=='BORROWED' ? 'lightpink' : 'white'"></tr>
         </table>
     </div>
+    <div *ngIf="!isLoadingResults && !isRateLimitReached && data.length === 0">You don't have any book transactions
+    </div>
+
 
     <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
 </div>

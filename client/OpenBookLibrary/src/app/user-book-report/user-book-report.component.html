@@ -1,0 +1,126 @@
+<div class="back" style="overflow: hidden; text-align: center;">
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+        <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
+        <strong>Error </strong>{{errorMessage}}
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+        <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
+        <strong>Success </strong> {{successMessage}}
+    </div>
+</div>
+
+<form [formGroup]="patronFormGroup">
+    <mat-form-field appearance="outline" style="width: 70%; margin-right :50px;">
+        <input type="text" placeholder="john@john@gmail.com" matInput formControlName="patronEmailCtrl"
+            [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let email of filteredPatronsEmail | async" [value]="email ">
+                {{email}}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="patronEmailCtrl.hasError('required')">
+            Patron Email is mandatory
+        </mat-error>
+        <mat-error *ngIf="patronEmailCtrl.hasError('email')">
+            Invalid Email format
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="accent" [disabled]="!patronFormGroup.valid"
+        (click)="viewPatronReport()">View</button>
+
+</form>
+<div *ngIf = "isUserEmailTyped">
+
+
+    <div class="mat-elevation-z8">
+        <div *ngIf="isLoadingResults || isRateLimitReached" mode="indeterminate">
+            <mat-progress-bar *ngIf="isLoadingResults" color="accent"></mat-progress-bar>
+            <div *ngIf="isRateLimitReached">
+                It is our fault, Please try again later!
+            </div>
+        </div>
+
+        <div>
+
+            <table cdk-table [dataSource]="data" class="table table-hover table-dark table-bordered" matSort
+                matSortActive="returnDate" matSortDisableClear matSortDirection="desc">
+                <!-- Book Title Column -->
+                <ng-container matColumnDef="borrowedBook.bookTitle">
+                    <th cdk-header-cell class="wrap-book-title" *matHeaderCellDef mat-sort-header disableClear
+                        class="hide-arrow">Book Title</th>
+                    <td cdk-cell style="color:black" *matCellDef="let row" #tooltip="matTooltip"
+                        [matTooltip]="row.borrowedBook.bookTitle" matTooltipPosition="below">
+                        {{ (row.borrowedBook.bookTitle.length > 15) ? row.borrowedBook.bookTitle.slice(0,15) + '...' : row.borrowedBook.bookTitle}}
+                    </td>
+                </ng-container>
+
+                <!-- Book Author Column -->
+                <ng-container matColumnDef="borrowedBook.bookAuthor.authorName">
+                    <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">Book Author
+                    </th>
+                    <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedBook.bookAuthor.authorName}}
+                    </td>
+                </ng-container>
+
+
+
+                <!-- Book Borrow Date Column -->
+                <ng-container matColumnDef="borrowedDate">
+                    <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
+                        Issuing Date
+                    </th>
+                    <td cdk-cell style="color : black" *matCellDef="let row">{{row.borrowedDate | date:'mediumDate' }}</td>
+                </ng-container>
+
+                <!-- Book Return Date Column -->
+                <ng-container matColumnDef="returnDate">
+                    <th cdk-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-arrow">
+                        Return Date
+                    </th>
+                    <td cdk-cell style="color : black" *matCellDef="let row">{{row.returnDate | date: 'mediumDate'}}
+                    </td>
+                </ng-container>
+
+                <!-- Book Category Column -->
+                <ng-container matColumnDef="fineTillDate">
+                    <th cdk-header-cell *matHeaderCellDef disableClear class="hide-arrow">Fine
+                    </th>
+                    <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookStatus == 'BORROWED' ? row.fineTillDate : 'NA'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="bookStatus">
+                    <th cdk-header-cell mat-sort-header *matHeaderCellDef disableClear class="hide-arrow">Borrow Status
+                    </th>
+                    <td cdk-cell style="color : black" *matCellDef="let row">{{row.bookStatus}}
+                    </td>
+                </ng-container>
+
+                <!-- Action  Column -->
+                <ng-container matColumnDef="actions">
+                    <th cdk-header-cell *matHeaderCellDef>
+                        Actions
+                    </th>
+                    <td cdk-cell *matCellDef="let row">
+                        <button type="button" mat-raised-button class="my-books-action" color="accent"
+                            #tooltip="matTooltip" [disabled]="row.bookStatus != 'BORROWED'" matTooltip="Deposit Book"
+                            matTooltipPosition="below" (click)="depositBook(row)"><mat-icon>library_add</mat-icon></button>
+                        <button mat-raised-button [class.my-books-action:hover]="row.bookStatus=='BORROWED'"
+                            color="accent" #tooltip="matTooltip" matTooltip="Lost Book" matTooltipPosition="below"
+                            [disabled]="row.bookStatus != 'BORROWED'" (click)="bookLostByUser(row)"><mat-icon>search_off</mat-icon></button>
+                    </td>
+                </ng-container>
+
+                <tr cdk-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr cdk-row *matRowDef="let row; columns: displayedColumns;"
+                    [style.background-color]="row.bookStatus=='BORROWED' ? 'lightpink' : 'white'"></tr>
+            </table>
+        </div>
+
+        <div *ngIf="!isLoadingResults && !isRateLimitReached && data.length === 0">Patron has no book transactions</div>
+        <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+    </div>
+
+</div>

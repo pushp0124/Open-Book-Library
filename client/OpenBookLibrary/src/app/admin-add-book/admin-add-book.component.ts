@@ -7,6 +7,7 @@ import { BookPublisher } from '../model/bookPublisher';
 import { LibraryBookService } from '../book-service';
 import { Book } from '../model/book';
 import { BookCategory } from '../model/bookCategory';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-add-book',
@@ -15,72 +16,107 @@ import { BookCategory } from '../model/bookCategory';
 })
 export class AdminAddBookComponent implements OnInit {
 
-  errorMessage : string;
-  successMessage : string;
+  errorMessage: string;
+  successMessage: string;
 
   bookFormGroup: FormGroup;
   authors: BookAuthor[] = [];
-  filteredAuthors: Observable<BookAuthor[]>;
+  authorsName : string[] = [];
+  filteredAuthors: Observable<string[]>;
 
   publishers: BookPublisher[] = [];
-  filteredPublishers: Observable<BookPublisher[]>;
+  publishersName : string[] = [];
+  filteredPublishers: Observable<string[]>;
 
-  categories : BookCategory[] = [];
-  constructor(private _formBuilder: FormBuilder, private bookService: LibraryBookService) { }
+  categories: BookCategory[] = [];
+  constructor(private _formBuilder: FormBuilder, private bookService: LibraryBookService) { 
+    this.bookFormGroup = this._formBuilder.group({
+      bookTitleCtrl: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      bookCategoryCtrl: ['', [Validators.required]],
+      bookAuthorCtrl: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      bookPublisherCtrl: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      bookDescriptionCtrl: ['', [Validators.required]],
+      bookCopiesCtrl: ['', [Validators.required, Validators.min(1), Validators.max(1000), Validators.pattern('^[0-9]+$')]],
+      bookCostCtrl: ['', [Validators.required, Validators.min(1), Validators.max(10000), Validators.pattern('^[0-9]+$')]],
+      bookEditionCtrl: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      bookImagesCtrl: ['', [Validators.required]]
+    });
+
+
+  }
 
   ngOnInit() {
 
-    this.bookService.getAllBookCategories(0,10000,"category","asc").subscribe((categoryApi) => {
+    
+    let categoryParams = new HttpParams()
+      .append('sortByColumn', 'category')
+      .append('sortDirection', 'asc')
+
+    let authorParams = new HttpParams()
+      .append('sortByColumn', 'authorName')
+      .append('sortDirection', 'asc')
+
+    let publisherParams = new HttpParams()
+      .append('sortByColumn', 'publisherName')
+      .append('sortDirection', 'asc')
+
+    this.bookService.getAllBookCategories(categoryParams).subscribe((categoryApi) => {
       this.categories = categoryApi.categories;
-    },(categoriesError) => {
+    }, (categoriesError) => {
       this.errorMessage = categoriesError.error.message;
     })
 
-    this.bookService.getAllBookAuthors(0,10000,"category","asc").subscribe((authorApi) => {
+    this.bookService.getAllBookAuthors(authorParams).subscribe((authorApi) => {
       this.authors = authorApi.authors;
-    },(authorsError) => {
+      this.authors.forEach(author => {
+        this.authorsName.push(author.authorName);  
+      });
+      this.filteredAuthors = this.bookAuthor.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => value ? this._filterAuthors(value) : this.authorsName)
+      );
+      console.log(this.filteredAuthors);
+    }, (authorsError) => {
       this.errorMessage = authorsError.error.message;
     })
 
-    this.bookService.getAllBookPublishers(0,10000,"category","asc").subscribe((publisherApi) => {
+    this.bookService.getAllBookPublishers(publisherParams).subscribe((publisherApi) => {
       this.publishers = publisherApi.publishers;
-    },(publishersError) => {
+      this.publishers.forEach(publisher => {
+        this.publishersName.push(publisher.publisherName);  
+      });
+      this.filteredPublishers = this.bookPublisher.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filterPublishers(value))
+      );
+    }, (publishersError) => {
       this.errorMessage = publishersError.error.message;
     })
 
-    this.bookFormGroup = this._formBuilder.group({
-      bookTitleCtrl: ['', [Validators.required]],
-      bookCategoryCtrl: ['', [Validators.required]],
-      bookAuthorCtrl : ['', [Validators.required]],
-      bookPublisherCtrl : ['',[Validators.required]],
-      bookDescriptionCtrl : ['', [Validators.required]],
-      bookCopiesCtrl : ['', [Validators.required]],
-      bookCostCtrl : ['', [Validators.required]],
-      bookEditionCtrl : ['', [Validators.required]],
-      bookImagesCtrl : ['', [Validators.required]]
+    
+    
+    
+  }
+
+  private _filterAuthors(authorName: string): string[] {
+    
+    const filterValue = authorName.toLowerCase();
+  
+    let filteredAuthorsName =  this.authorsName.filter(author => {
+      return author.toLowerCase().includes(filterValue.toLowerCase())
     });
-    this.filteredAuthors = this.bookAuthor.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterAuthors(value))
-    );
-    this.filteredPublishers = this.bookPublisher.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterPublishers(value))
-    );
+    return filteredAuthorsName;
   }
 
-  private _filterAuthors(author: BookAuthor): BookAuthor[] {
-    const filterValue = author.authorName.toLowerCase();
+  private _filterPublishers(publisherName: string): string[] {
+    const filterValue = publisherName.toLowerCase();
 
-    return this.authors.filter(author => author.authorName.toLowerCase().includes(filterValue));
-  }
-
-  private _filterPublishers(publisher: BookPublisher): BookPublisher[] {
-    const filterValue = publisher.publisherName.toLowerCase();
-
-    return this.publishers.filter(publisher => publisher.publisherName.toLowerCase().includes(filterValue));
+    let filteredPublishersName =  this.publishersName.filter(publisher => {
+      return publisher.toLowerCase().includes(filterValue)
+    })
+    return filteredPublishersName;
   }
 
   //getting form-controls
@@ -106,7 +142,7 @@ export class AdminAddBookComponent implements OnInit {
     return this.bookFormGroup.controls['bookCopiesCtrl'];
   }
 
-  
+
   get bookEdition(): AbstractControl {
     return this.bookFormGroup.controls['bookEditionCtrl'];
   }
@@ -121,13 +157,36 @@ export class AdminAddBookComponent implements OnInit {
   }
 
   addBook() {
-    let book = new Book(this.bookTitle.value,this.bookCategory.value,this.bookAuthor.value,this.bookPublisher.value,this.bookDescription.value,this.bookCopies.value,this.bookCost.value,this.bookEdition.value,this.bookImages.value);
-    this.bookService.addBook(book).subscribe((book) => {
+
+   
+    let bookAuthor = new BookAuthor();
+    bookAuthor.authorName = this.bookAuthor.value
+     this.authors.forEach((author) => {
+          if(author.authorName == bookAuthor.authorName) {
+              bookAuthor = author;
+          } 
+    })
+
+    let bookPublisher = new BookPublisher();
+    bookPublisher.publisherName = this.bookPublisher.value
+     this.publishers.forEach((publisher) => {
+          if(publisher.publisherName == bookAuthor.authorName) {
+              bookPublisher = publisher;
+          } 
+    })
+
+    let bookImages : string[]= []
+    bookImages.push(this.bookImages.value)
+    let book = new Book(this.bookTitle.value, this.bookCategory.value, bookAuthor, bookPublisher, this.bookDescription.value, this.bookCopies.value, this.bookCost.value, this.bookEdition.value, bookImages, true);
+    book.bookAvailableCopies = this.bookCopies.value
+    let books: Book[] = []
+    books.push(book)
+    this.bookService.addBook(books).subscribe((isSuccess) => {
       this.successMessage = "Book Added successfully"
     },
-    (bookAdditionError) => {
-      this.errorMessage = bookAdditionError.error.message;
-    })
+      (bookAdditionError) => {
+        this.errorMessage = bookAdditionError
+      })
   }
 
 

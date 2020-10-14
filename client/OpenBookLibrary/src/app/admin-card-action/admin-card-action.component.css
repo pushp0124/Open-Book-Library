@@ -1,0 +1,8 @@
+.my-card:hover {
+    box-shadow: 10px 10px 5px grey;
+   
+}
+.my-card  {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

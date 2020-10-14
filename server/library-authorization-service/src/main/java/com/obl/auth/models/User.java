@@ -1,12 +1,15 @@
 package com.obl.auth.models;
 
-import java.util.Arrays;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
@@ -15,7 +18,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
 	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String userName;
 	
 	@Column(unique = true, nullable = false)
@@ -28,14 +31,15 @@ public class User {
 	private String userAddress;
 	
 	@Column(nullable = false)
-	private Boolean isAdmin;
+	private String password; 
 	
-	@Column(nullable = false)
-	private String hashedPassword; 
-	
-	@Column(nullable = false)
-	private byte[] saltArray;
-	
+	private Integer active=1;
+    private boolean isLocked=false;
+    private boolean isExpired=false;
+    private boolean isEnabled=true;
+    
+    @ManyToMany(cascade=CascadeType.PERSIST)
+    private Set<Role> role;
 	public Integer getUserId() {
 		return userId;
 	}
@@ -66,33 +70,51 @@ public class User {
 	public void setUserAddress(String userAddress) {
 		this.userAddress = userAddress;
 	}
-	public Boolean getIsAdmin() {
-		return isAdmin;
+	
+	public String getPassword() {
+		return password;
 	}
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public String getHashedPassword() {
-		return hashedPassword;
+	public Integer getActive() {
+		return active;
 	}
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
+	public void setActive(Integer active) {
+		this.active = active;
 	}
-	public byte[] getSaltArray() {
-		return saltArray;
+	public boolean isLocked() {
+		return isLocked;
 	}
-	public void setSaltArray(byte[] saltArray) {
-		this.saltArray = saltArray;
+	public void setLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
+	public boolean isExpired() {
+		return isExpired;
+	}
+	public void setExpired(boolean isExpired) {
+		this.isExpired = isExpired;
+	}
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+	public Set<Role> getRole() {
+		return role;
+	}
+	public void setRole(Set<Role> role) {
+		this.role = role;
 	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", userEmail=" + userEmail + ", userPhoneNo="
-				+ userPhoneNo + ", userAddress=" + userAddress + ", isAdmin=" + isAdmin + ", hashedPassword="
-				+ hashedPassword + ", saltArray=" + Arrays.toString(saltArray) + "]";
+				+ userPhoneNo + ", userAddress=" + userAddress + ", password=" + password
+				+ ", active=" + active + ", isLocked=" + isLocked + ", isExpired=" + isExpired + ", isEnabled="
+				+ isEnabled + ", role=" + role + "]";
 	}
-	
-	
-	
+   
 	
 }
 

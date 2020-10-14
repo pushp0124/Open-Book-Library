@@ -1,30 +1,33 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Book } from './model/book';
-import { IssueBookApi } from './model/issueBookApi';
+import { IssueBookApi } from './model/bookTransactionDto';
 import { BookCategory } from './model/bookCategory';
 import { BookAuthor } from './model/bookAuthor';
 import { BookPublisher } from './model/bookPublisher';
-import { IssueBook } from './model/issueBook';
+import { BookTransaction } from './model/bookTransaction';
 import { LibraryAuthService } from './auth-service';
 import { SearchModel } from './model/searchModel';
-import { SortDirection } from '@angular/material/sort';
 import { BookCategoryApi } from './model/bookCategoryApi';
 import { BookAuthorApi } from './model/bookAuthorApi';
 import { BookPublisherApi } from './model/bookPublisherApi';
+import { BookDto } from './model/bookDto';
+import { InventoryReport } from './model/inventoryReport';
+import { TopBorrowedBooks } from './model/topBorrowedBooks';
+
 @Injectable({
     providedIn: 'root'
 })
+
+
 export class LibraryBookService {
 
 
-    private baseUrl = "http://localhost:8101/books";
+    private baseUrl = "http://localhost:8100/books";
 
     dateFormatter = 'yyyy-MM-dd';
-
-    detailAboutBook = new IssueBook();
 
     private searchModel = new BehaviorSubject(new SearchModel());
     currentSearch$ = this.searchModel.asObservable();
@@ -32,13 +35,13 @@ export class LibraryBookService {
     constructor(private http: HttpClient, private router: Router, private authService: LibraryAuthService) { }
 
 
-    viewBooks(): Observable<Book[]> {
-        return this.http.get<Book[]>(this.baseUrl + "/view/allBooks");
+    viewBooks(selectedCategoryId : number, params? : HttpParams): Observable<BookDto> {
+        return this.http.get<BookDto>(this.baseUrl + "/view/all/books/" + selectedCategoryId, {params : params});
 
     }
 
-    addBook(book: Book): Observable<Book> {
-        return this.http.post<Book>(this.baseUrl + "/add/book", book);
+    addBook(books: Book[]) : Observable<Boolean> {
+        return this.http.post<Boolean>(this.baseUrl + "/add/books", books);
     }
 
     addBookCategory(category: BookCategory): Observable<BookCategory> {
@@ -57,59 +60,107 @@ export class LibraryBookService {
         return this.http.put<Book>(this.baseUrl + "/update/book", updatedBook);
     }
 
-    issueBook(issuedBookId: number): Observable<IssueBook> {
-
-        let headers = new HttpHeaders().set('emailId', this.authService.loggedInUser.userEmail);
-        headers = headers.set('password', "1234");
-        console.log(headers)
-        return this.http.post<IssueBook>(this.baseUrl + "/issueBook/" + issuedBookId, null, { headers: headers });
+    updatePublisher(updatedPublisher : BookPublisher) : Observable<BookPublisher>{
+        return this.http.put<BookPublisher>(this.baseUrl + "/update/publisher", updatedPublisher)
     }
 
-    viewIssuedBooks(issuedToUserId: number, pageNumber: number, pageSize: number, sortByColumn : string, sortDirection : SortDirection) : Observable<IssueBookApi> {
-        return this.http.get<IssueBookApi>(this.baseUrl + "/myBooks/" + issuedToUserId + "/" + pageNumber + "/" + pageSize + "/" + sortByColumn + "/" + sortDirection);
+    updateBookCategory(updatedCategory : BookCategory) : Observable<BookCategory>{
+        return this.http.put<BookCategory>(this.baseUrl + "/update/category", updatedCategory)
+    }
+
+    updateBookAuthor(updatedAuthor : BookAuthor) : Observable<BookAuthor>{
+        return this.http.put<BookAuthor>(this.baseUrl + "/update/author", updatedAuthor)
+    }
+
+
+    borrowBook(issuedBookId: number, borrowedToUser : number, borrowedDate : string): Observable<BookTransaction> {
+
+       
+        return this.http.post<BookTransaction>(this.baseUrl + "/borrowBook/" + issuedBookId + "/" + borrowedToUser + "/" + borrowedDate, null);
+    }
+
+    viewBorrowedBooks(issuedToUserId: number, params : HttpParams) : Observable<IssueBookApi> {
+    
+        return this.http.get<IssueBookApi>(this.baseUrl + "/borrowedBooks/" + issuedToUserId, {params : params});
     }
     
 
-    viewAllIssuedBooks(pageNumber: number, pageSize: number, sortByColumn : string, sortDirection : SortDirection) : Observable<IssueBookApi> {
-        return this.http.get<IssueBookApi>(this.baseUrl + "/myBooks/" + pageNumber + "/" + pageSize + "/" + sortByColumn + "/" + sortDirection);
+    viewAllBorrowedBooks(params : HttpParams) : Observable<IssueBookApi> {
+        return this.http.get<IssueBookApi>(this.baseUrl + "/borrowedBooks", {params : params});
     }
     
-	viewBooksByTitleSearch(bookTitleSearchString : string) : Observable<Book[]> {
-		return this.http.get<Book[]>(this.baseUrl + "/search/title/" + bookTitleSearchString)
+	viewBooksByTitleSearch(selectedCategoryId : number, bookTitleSearchString : string) : Observable<Book[]> {
+		return this.http.get<Book[]>(this.baseUrl + "/search/title/" + bookTitleSearchString + "/" + selectedCategoryId)
     }
     
-    viewBooksByAuthorSearch(bookAuthorSearchString : string) : Observable<Book[]> {
-		return this.http.get<Book[]>(this.baseUrl + "/search/author/" + bookAuthorSearchString)
-    }
-    
-
-    viewBooksByCategorySearch(bookCategorySearchString : string) : Observable<Book[]> {
-		return this.http.get<Book[]>(this.baseUrl + "/search/category/" + bookCategorySearchString)
+    viewBooksByAuthorSearch(selectedCategoryId : number, bookAuthorSearchString : string) : Observable<Book[]> {
+		return this.http.get<Book[]>(this.baseUrl + "/search/author/" + bookAuthorSearchString + "/" + selectedCategoryId)
     }
     
 
-    viewBooksByPublisherSearch(bookPublisherSearchString : string) : Observable<Book[]> {
-		return this.http.get<Book[]>(this.baseUrl + "/search/publisher/" + bookPublisherSearchString)
+    viewBooksByCategorySearch(selectedCategoryId : number, bookCategorySearchString : string) : Observable<Book[]> {
+		return this.http.get<Book[]>(this.baseUrl + "/search/category/" + bookCategorySearchString + "/" + selectedCategoryId)
+    }
+    
+
+    viewBooksByPublisherSearch(selectedCategoryId : number, bookPublisherSearchString : string) : Observable<Book[]> {
+		return this.http.get<Book[]>(this.baseUrl + "/search/publisher/" + bookPublisherSearchString + "/" + selectedCategoryId)
     }
 
 
-    viewBooksByAllSearch(bookAllSearchString : string) : Observable<Book[]> {
-		return this.http.get<Book[]>(this.baseUrl + "/search/all/" + bookAllSearchString)
+    viewBooksByAllSearch(selectedCategoryId : number, bookAllSearchString : string) : Observable<Book[]> {
+		return this.http.get<Book[]>(this.baseUrl + "/search/all/" + bookAllSearchString + "/" + selectedCategoryId)
     }
 
-    getAllBookCategories(pageNumber: number, pageSize: number, sortByColumn : string, sortDirection : SortDirection) : Observable<BookCategoryApi> {
-        return this.http.get<BookCategoryApi>(this.baseUrl + "/view/all/category/" + pageNumber + "/" + pageSize + "/" + sortByColumn + "/" + sortDirection);
+    getAllBookCategories(params : HttpParams) : Observable<BookCategoryApi> {
+        return this.http.get<BookCategoryApi>(this.baseUrl + "/get/all/categories", {params : params});
     }
 
-    getAllBookAuthors(pageNumber: number, pageSize: number, sortByColumn : string, sortDirection : SortDirection) : Observable<BookAuthorApi> {
-        return this.http.get<BookAuthorApi>(this.baseUrl + "/view/all/author/" + pageNumber + "/" + pageSize + "/" + sortByColumn + "/" + sortDirection);
+    getAllBookAuthors(params : HttpParams) : Observable<BookAuthorApi> {
+        return this.http.get<BookAuthorApi>(this.baseUrl + "/get/all/authors", {params : params});
     }
 
-    getAllBookPublishers(pageNumber: number, pageSize: number, sortByColumn : string, sortDirection : SortDirection) : Observable<BookPublisherApi> {
-        return this.http.get<BookPublisherApi>(this.baseUrl + "/view/all/publisher" + pageNumber + "/" + pageSize + "/" + sortByColumn + "/" + sortDirection);
+    getAllBookPublishers(params : HttpParams) : Observable<BookPublisherApi> {
+        return this.http.get<BookPublisherApi>(this.baseUrl + "/get/all/publishers", {params : params});
+    }
+
+    depositBorrowedBook(transactionId : number) : Observable<BookTransaction> {
+        return this.http.put<BookTransaction>(this.baseUrl + "/depositBook/" + transactionId, null);
     }
     
     changeSearch(search: SearchModel) {
         this.searchModel.next(search)
+    }
+
+    bookLostByUser(issuedBookId : number) : Observable<BookTransaction[]> {
+        return this.http.put<BookTransaction[]>(this.baseUrl + "/lostBook/" + issuedBookId, null);
+    }
+
+    getBorrowedBooksDate()  : Observable<Date[]>{
+        return this.http.get<Date[]>(this.baseUrl + "/get/borrowedBooksDate");
+    }
+
+    getTopBorrowedBooks(params : HttpParams) : Observable<TopBorrowedBooks[]>{
+        return this.http.get<TopBorrowedBooks[]>(this.baseUrl + "/get/topBorrowedBooks", {params : params})
+    }
+
+    getInventoryReport() : Observable<InventoryReport> {
+        return this.http.get<InventoryReport>(this.baseUrl + "/get/inventoryReport")
+    }
+
+    notifyMe(userId : number, bookId : number) : Observable<Boolean> {
+        return this.http.put<Boolean>(this.baseUrl + "/add/in-notification-list/" + userId + "/" +bookId, null)
+    }
+
+    getBookById(bookId : number)  : Observable <Book>{
+        return this.http.get<Book>(this.baseUrl + "/get/bookDetail/" + bookId);
+    }
+
+    getBooksOfAuthor(authorId : number, params? : HttpParams) : Observable<BookDto> {
+        return this.http.get<BookDto>(this.baseUrl + "/get/books/ofAuthor/" + authorId, {params : params});
+    }
+    
+    getBooksOfCategory(categoryId : number, params? : HttpParams) {
+        return this.http.get<BookDto>(this.baseUrl + "/get/books/ofCategory/" + categoryId, {params : params});
     }
 }

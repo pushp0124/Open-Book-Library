@@ -1,6 +1,6 @@
 package com.obl.book.models.enums;
 
-public enum IssueBookStatus {
+public enum BookTransactionStatus {
 
-	LOST,RETURNED,ISSUED;
+	LOST,RETURNED,BORROWED;
 }

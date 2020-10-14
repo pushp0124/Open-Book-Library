@@ -1,13 +1,20 @@
 <div class="sidebar">
     <a routerLink="/adminhomepage" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Home </a>
+    <a routerLink="book-list" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Book List </a>
     <a routerLink="add-book" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Add Book</a>
     <a routerLink="add-book-category" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Add Book Category</a>
+    <a routerLink="add-book-author" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Add Book Author</a>
+    <a routerLink="add-book-publisher" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Add Book Publisher</a>
     <a routerLink="book-transactions" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Deposit Book</a>
+    <a routerLink="user-book-report" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Patron Borrows</a>
+    <a routerLink="library-feedback" routerLinkActive="active"> Redressal Group </a>
+    <a routerLink="settings" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Settings </a>
+    <a routerLink="inventory-report" routerLinkActive = "active" [routerLinkActiveOptions]="{exact: true}"> Report</a>
 </div>
   
 
   <div class="content">
-    <div class="col-md-10 card card-body text-center">
+    <div class="col-md-12 card card-body text-center">
        <router-outlet> </router-outlet>
    </div>
   </div>

@@ -13,38 +13,84 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { AdminAddBookComponent } from './admin-add-book/admin-add-book.component';
 import { MyBooksComponent } from './my-books/my-books.component';
+import { AddBookCategoryComponent } from './add-book-category/add-book-category.component';
+import { DepositBookComponent } from './deposit-book/deposit-book.component';
+import { BookListComponent } from './book-list/book-list.component';
+import { AddBookPublisherComponent } from './add-book-publisher/add-book-publisher.component';
+import { AddBookAuthorComponent } from './add-book-author/add-book-author.component';
+import { UserBookReportComponent } from './user-book-report/user-book-report.component';
+import { PatronFeedbackComponent } from './patron-feedback/patron-feedback.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { LibraryConstantsComponent } from './library-constants/library-constants.component';
+import { InventoryReportComponent } from './inventory-report/inventory-report.component';
 
 
-const routes: Routes = [
+export const routes: Routes = [
 
   { path: 'appnav', component: AppNavComponent },
-  { path: 'userlogin', component: UserLoginComponent },
   {
-    path: 'userhomepage',
+    path: 'userlogin', component: UserLoginComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
     component: UserHomePageComponent,
     canActivate: [AuthGuard],
+    data: { roles: ['ROLE_USER'] },
     children: [
-      { path: '', component: UserHomeChildComponent },
-      { path: 'my-books', component: MyBooksComponent },
-      { path: 'book-detail', component: BookDetailComponent },
+      {
+        path: 'catalog/:categoryId',
+        children: [
+          { path: '', component: UserHomeChildComponent },
+          { path: 'book/:id', component: BookDetailComponent },
+          {path : 'profile', component : UserProfileComponent}
+        ]
+      }
+      ,
+      {
+        path: 'my-books',
+        children: [
+          { path: '', component: MyBooksComponent },
+          { path: 'book/:id', component: BookDetailComponent }
+        ]
+      },
+      { path : 'library-feedback', component : PatronFeedbackComponent}
     ]
-  },
-  {
-    path: 'adminhomepage',
+  }, 
+{
+  path: 'adminhomepage',
     component: AdminHomePageComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: '', component: AdminHomeChildComponent },
-      { path: 'add-book', component: AdminAddBookComponent },
-      { path: 'add-book-category', component: AdminAddBookComponent },
-      { path: 'book-transactions', component: AdminAddBookComponent }
-    ]
+      canActivate: [AuthGuard],
+        data: { roles: ['ROLE_ADMIN'] },
+  children: [
+    { path: '', component: AdminHomeChildComponent },
+    { path: 'add-book', component: AdminAddBookComponent },
+    { path: 'book-list', component: BookListComponent },
+    { path: 'add-book-category', component: AddBookCategoryComponent },
+    { path: 'add-book-author', component: AddBookAuthorComponent },
+    { path: 'add-book-publisher', component: AddBookPublisherComponent },
+    { path: 'user-book-report', component: UserBookReportComponent },
+    { path: 'book-transactions', component: DepositBookComponent },
+    {path : 'profile', component : UserProfileComponent},
+    {path : 'inventory-report', component : InventoryReportComponent},
+    {path : 'library-feedback', component : PatronFeedbackComponent},
+    {path : 'settings', component : LibraryConstantsComponent}
+  ]
 
-  },
-  { path: 'encrypted/adminsignup', component: SignUpComponent },
-  { path: 'signup', component: SignUpComponent },
-  { path: '', component: HomeComponent },
-  { path: '**', component: PageNotFoundComponent }
+},
+{
+  path: 'encrypted/adminsignup', component: SignUpComponent,
+    canActivate: [AuthGuard]
+},
+{
+  path: 'signup', component: SignUpComponent,
+    canActivate: [AuthGuard]
+},
+{
+  path: '', component: HomeComponent,
+    canActivate: [AuthGuard]
+},
+{ path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

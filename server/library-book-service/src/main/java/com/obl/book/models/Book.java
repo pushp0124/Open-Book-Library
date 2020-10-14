@@ -1,17 +1,24 @@
 package com.obl.book.models;
 
 import java.util.Arrays;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
+
+import org.hibernate.annotations.Check;
+
+import com.obl.book.models.common.User;
 
 
 @Entity
+@Check(constraints = "BOOK_COPIES >= BOOK_AVAILABLE_COPIES")
 public class Book {
 
 	@Id
@@ -38,9 +45,11 @@ public class Book {
 	private Double bookRating;
 	
 	@Column(nullable = false)
+	@Min(value = 0)
 	private Integer bookCopies;
 	
 	@Column(nullable = false)
+	@Min(value = 0)
 	private Integer bookAvailableCopies;
 	
 	@Column(nullable = false)
@@ -54,6 +63,9 @@ public class Book {
 	
 	@Column(nullable = false)
 	private String[] bookImages;
+	
+	@OneToMany
+	private List<User> toNotifyUsers;
 
 	public Integer getBookId() {
 		return bookId;
@@ -159,17 +171,26 @@ public class Book {
 		this.bookImages = bookImages;
 	}
 
+	public List<User> getToNotifyUsers() {
+		return toNotifyUsers;
+	}
+
+	public void setToNotifyUsers(List<User> toNotifyUsers) {
+		this.toNotifyUsers = toNotifyUsers;
+	}
+
 	@Override
 	public String toString() {
 		return "Book [bookId=" + bookId + ", bookTitle=" + bookTitle + ", bookCategory=" + bookCategory
 				+ ", bookAuthor=" + bookAuthor + ", bookPublisher=" + bookPublisher + ", bookDescription="
 				+ bookDescription + ", bookRating=" + bookRating + ", bookCopies=" + bookCopies
 				+ ", bookAvailableCopies=" + bookAvailableCopies + ", isAvailable=" + isAvailable + ", bookCost="
-				+ bookCost + ", bookEdition=" + bookEdition + ", bookImages=" + Arrays.toString(bookImages) + "]";
+				+ bookCost + ", bookEdition=" + bookEdition + ", bookImages=" + Arrays.toString(bookImages)
+				+ ", toNotifyUsers=" + toNotifyUsers + "]";
 	}
+
 	
-	
-	
+
 	
 	
 }

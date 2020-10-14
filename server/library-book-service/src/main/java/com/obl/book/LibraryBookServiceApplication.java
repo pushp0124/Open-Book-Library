@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class LibraryBookServiceApplication {
 
 
+	
 	@LoadBalanced
 	@Bean
 	public RestTemplate getRestTemplate() {

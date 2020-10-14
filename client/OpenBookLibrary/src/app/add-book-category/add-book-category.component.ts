@@ -5,6 +5,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
+import { MatDialog } from '@angular/material';
+import { CategoryModifyComponent } from '../category-modify/category-modify.component';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-add-book-category',
@@ -21,12 +25,21 @@ export class AddBookCategoryComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
 
+  categoryFormGroup : FormGroup;
+
+  errorMessage : string;
+  successMessage : string;
+  
+
   @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static:false}) sort: MatSort;
 
-  constructor(private bookService: LibraryBookService) {}
+  constructor(private bookService: LibraryBookService, private matDialog : MatDialog, private _formBuilder : FormBuilder) {}
   
   ngOnInit() {
+    this.categoryFormGroup = this._formBuilder.group({
+      categoryCtrl : ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]]
+    });
 
   }
   ngAfterViewInit() {
@@ -39,8 +52,13 @@ export class AddBookCategoryComponent implements OnInit, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
+          let params = new HttpParams()
+          .append('pageNo',this.paginator.pageIndex.toString())
+          .append('pageSize','5')
+          .append('sortByColumn',this.sort.active)
+          .append('sortDirection',this.sort.direction)
           return this.bookService.getAllBookCategories
-          (this.paginator.pageIndex,10,this.sort.active,this.sort.direction);
+          (params);
         }),
         map(data => {
           // Flip flag to show that loading has finished.
@@ -48,7 +66,7 @@ export class AddBookCategoryComponent implements OnInit, AfterViewInit {
           this.isRateLimitReached = false;
           this.resultsLength = data.total_count;
 
-          return data.books;
+          return data.categories;
         }),
         catchError(() => {
           this.isLoadingResults = false;
@@ -56,6 +74,35 @@ export class AddBookCategoryComponent implements OnInit, AfterViewInit {
           return observableOf([]);
         })
       ).subscribe(data => this.data = data);
+  }
+  updateBookCategory(category : BookCategory) {
+    let dialogRef = this.matDialog.open(CategoryModifyComponent, {
+      data: category
+    });
+  }
+
+  get categoryCtrl(): AbstractControl {
+    return this.categoryFormGroup.controls['categoryCtrl'];
+  }
+
+
+  errorClosed() {
+    this.errorMessage = undefined;
+  }
+
+  successClosed() {
+    this.successMessage = undefined;
+  }
+
+
+  addCategory() {
+    let category = new BookCategory();
+    category.category = this.categoryCtrl.value;
+    this.bookService.addBookCategory(category).subscribe((category) => {
+        this.successMessage = "Category Added Successfully";
+    },(publisherError) => {
+      this.errorMessage = publisherError.error.message;
+    })
   }
 
 }

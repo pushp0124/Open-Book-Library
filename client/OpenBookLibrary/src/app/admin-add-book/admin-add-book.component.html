@@ -1,4 +1,4 @@
- <div class="alert alert-danger" *ngIf="errorMessage">
+<div class="alert alert-danger" *ngIf="errorMessage">
     <button type="button" class="close" aria-hidden="true" (click)="errorClosed()">&times;</button>
     <strong>Error </strong>{{errorMessage}}
 </div>
@@ -7,67 +7,157 @@
     <button type="button" class="close" (click)="successClosed()" aria-hidden="true">&times;</button>
     <strong>Success </strong> {{successMessage}}
 </div>
-<form [formGroup]="bookFormGroup">
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <mat-label>Book title</mat-label>
-            <input matInput formControlName="bookTitleCtrl" placeholder="Short title">
-        </mat-form-field>
-    </p>
 
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <mat-label>Select Book Category</mat-label>
-            <mat-select [formControl]="bookCategoryCtrl">
-                <mat-option *ngFor="let category of categories" [value]="category">{{category.category}}
-                </mat-option>
-            </mat-select>
-            <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
-        </mat-form-field>
-    </p>
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <input type="text" placeholder="Book Author" matInput [formControl]="bookAuthor" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let author of filteredAuthors | async" [value]="author">
-                    {{author.name}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
+<div class="container-fluid" style="background-color: #F5F5F5;
+border: solid #F0F0F0;
+border-radius: 5px;">
 
-    </p>
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <input type="text" placeholder="Book Publisher" matInput [formControl]="bookPublisher"
-                [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let publisher of filteredPublishers | async" [value]="publisher">
-                    {{publisher.publisherName}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-    </p>
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <mat-label>Book Copies</mat-label>
-            <input matInput formControlName="bookCopiesCtrl" placeholder="10">
-        </mat-form-field>
-    </p>
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <mat-label>Book Edition</mat-label>
-            <input matInput formControlName="bookEditionCtrl" placeholder="First Edition">
-        </mat-form-field>
-    </p>
 
-    <p>
-        <mat-form-field appearance="outline" style="width : 100%">
-            <mat-label>Book Description</mat-label>
-            <textarea matInput formControlName="bookDescriptionCtrl"
-                placeholder="This book is written by one of the most famous author..."></textarea>
-        </mat-form-field>
-    </p>
 
-    <button mat-raised-button color="accent" [disabled]="!bookFormGroup.valid" (click)="addBook()">Add Book</button>
+    <mat-card style="width: 90%; margin: 5px auto;">
 
-</form>
+
+        <form [formGroup]="bookFormGroup">
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book title</mat-label>
+                    <input matInput formControlName="bookTitleCtrl" placeholder="Short title">
+                    <mat-error *ngIf="bookTitle.hasError('required')">
+                        Book Title is mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookTitle.hasError('pattern')">
+                        Book Title should only have characters
+                    </mat-error>
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Select Book Category</mat-label>
+                    <mat-select formControlName="bookCategoryCtrl">
+                        <mat-option *ngFor="let category of categories" [value]="category">{{category.category}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+                    <mat-error *ngIf="bookCategory.hasError('required')">
+                        Book Category is mandatory
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <input type="text" placeholder="Book Author" matInput formControlName="bookAuthorCtrl"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let author of filteredAuthors | async" [value]="author">
+                            {{author}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="bookAuthor.hasError('required')">
+                        Book Author is mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookAuthor.hasError('pattern')">
+                        Book Author should ony have characters
+                    </mat-error>
+                </mat-form-field>
+
+            </p>
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <input type="text" placeholder="Book Publisher" matInput formControlName="bookPublisherCtrl"
+                        [matAutocomplete]="auto1">
+                    <mat-autocomplete #auto1="matAutocomplete">
+                        <mat-option *ngFor="let publisher of filteredPublishers | async" [value]="publisher">
+                            {{publisher}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="bookPublisher.hasError('required')">
+                        Book Publisher is mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookPublisher.hasError('pattern')">
+                        Book Publisher should ony have characters
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book Copies</mat-label>
+                    <input matInput formControlName="bookCopiesCtrl" placeholder="10">
+                    <mat-error *ngIf="bookCopies.hasError('required')">
+                        Book Available Copies are mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookCopies.hasError('min')">
+                        Book Available Copies should be greater than 0
+                    </mat-error>
+                    <mat-error *ngIf="bookCopies.hasError('max')">
+                        Book Available Copies should not be greater than 1000
+                    </mat-error>
+                    <mat-error *ngIf="bookCopies.hasError('pattern')">
+                        Invalid Number Format
+                    </mat-error>
+                </mat-form-field>
+
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book Cost</mat-label>
+                    <input matInput formControlName="bookCostCtrl" placeholder="10">
+                    <span matPrefix>$&nbsp;</span>
+                    <span matSuffix>.00</span>
+                    <mat-error *ngIf="bookCost.hasError('required')">
+                        Book Cost is mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookCost.hasError('min')">
+                        Book Cost should be greater than 0
+                    </mat-error>
+                    <mat-error *ngIf="bookCost.hasError('max')">
+                        Book Cost should be lesser than INR 10,000. #Hint Have one book price only
+                    </mat-error>
+                    <mat-error *ngIf="bookCost.hasError('pattern')">
+                        Invalid Number Format
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book Edition</mat-label>
+                    <input matInput formControlName="bookEditionCtrl" placeholder="First Edition">
+                    <mat-error *ngIf="bookEdition.hasError('required')">
+                        Book Edition is mandatory
+                    </mat-error>
+                    <mat-error *ngIf="bookEdition.hasError('pattern')">
+                        Book Edition should only have characters
+                    </mat-error>
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book Cover Image</mat-label>
+                    <input matInput formControlName="bookImagesCtrl" placeholder="Book Image Url">
+                    <mat-error *ngIf="bookImages.hasError('required')">
+                        Book Cover Image is mandatory
+                    </mat-error>
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" style="width : 100%">
+                    <mat-label>Book Description</mat-label>
+                    <textarea matInput formControlName="bookDescriptionCtrl"
+                        placeholder="This book is written by one of the most famous author..."></textarea>
+                    <mat-error *ngIf="bookDescription.hasError('required')">
+                        Book Description is mandatory, helps patrons to give a brief description about the book!
+                    </mat-error>
+
+                </mat-form-field>
+            </p>
+
+            <button mat-raised-button color="accent" [disabled]="!bookFormGroup.valid" (click)="addBook()">Add
+                Book</button>
+
+        </form>
+
+    </mat-card>
+</div>

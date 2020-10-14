@@ -1,3 +1,4 @@
+import { Role } from './role';
 
 export class User {
     userId : number;
@@ -5,17 +6,19 @@ export class User {
     userName : string;
 	userPhoneNo : string;
     userAddress : string;
-    isAdmin : boolean;
-    hashedPassword : string;
-    
-    constructor(userId: number,userEmail: string, userName: string, userPhoneNo: string,userAddress : string, isAdmin: boolean,hashedPassword : string) {
+    password : string;
+    isEnabled : boolean;
+    roles : Role[];
+   
+   
+     constructor(userId: number,userEmail: string, userName: string, userPhoneNo: string,userAddress : string,password : string, roles : Role[]) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userName = userName;
         this.userPhoneNo = userPhoneNo;
         this.userAddress = userAddress;
-        this.isAdmin = isAdmin;
-        this.hashedPassword = hashedPassword;
-        
+        this.password = password;
+        this.roles = roles;
+      
     }
 }

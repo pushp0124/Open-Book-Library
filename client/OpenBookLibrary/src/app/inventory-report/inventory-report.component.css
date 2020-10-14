@@ -1,0 +1,10 @@
+.my-container {
+    
+    background-color: white;
+    border: solid #F0F0F0;
+    border-radius: 5px;
+   
+}
+
+td { text-align: right; }
+td:first-child { text-align: left; }
