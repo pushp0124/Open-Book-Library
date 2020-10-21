@@ -13,7 +13,7 @@
 
     <mat-progress-bar mode="indeterminate" style="margin-top: 5px;" *ngIf="isLoggingIn"></mat-progress-bar>
     <mat-card style="margin: 0 auto; width: 30%; margin-top:50px; ">
-        
+
         <form [formGroup]="loginFormGroup">
             <mat-form-field appearance="outline" style="width: 100%">
                 <mat-label>Email</mat-label>
@@ -38,11 +38,14 @@
                 </mat-error>
             </mat-form-field>
             <p> </p>
-            <button mat-raised-button color="accent" style="margin : 0 auto;" [disabled]="!loginFormGroup.valid || isLoggingIn"
-                (click)="loginUser()">{{buttonTxt}}</button>
+            <button mat-raised-button color="accent" style="margin : 0 auto;"
+                [disabled]="!loginFormGroup.valid || isLoggingIn" (click)="loginUser()">{{buttonTxt}}</button>
         </form>
 
-        <button color="accent" mat-stroked-button style="margin: 20px auto" routerLink="/signup"
+        <button color="accent" mat-stroked-button style="margin: 20px auto" (click) = "forgotPassword()">Forgot Password</button>
+        <br>
+        <button color="primary" mat-stroked-button style="margin: 20px auto" routerLink="/signup"
             routerLinkActive="active">Don't have an account, Register now! </button>
+        
     </mat-card>
 </div>

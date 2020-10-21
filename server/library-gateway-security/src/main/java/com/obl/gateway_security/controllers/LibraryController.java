@@ -12,6 +12,8 @@ import com.obl.gateway_security.models.UpdateUserProfile;
 import com.obl.gateway_security.models.User;
 import com.obl.gateway_security.services.AuthenticationService;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -33,6 +35,14 @@ public class LibraryController {
 
     @PostMapping("/valid/token")
     public Boolean isValidToken (@RequestHeader(value="Authorization") String token) {
+    	HashMap<String, Integer> map = new HashMap<String, Integer>();
+    	map.put("Key1", 123);
+    	HashSet<HashMap<String, Integer>> set = new HashSet<HashMap<String, Integer>>();
+    	for(String key : map.keySet()) {
+    		set.add(map);
+    	}
+    	
+    	
         return true;
     }
 
@@ -72,6 +82,7 @@ public class LibraryController {
     
     @GetMapping("/forgotPassword/{userName}")
     public Boolean forgotPassword(@PathVariable String userName) {
+    	
     	return authService.forgotPassword(userName);
     }
     

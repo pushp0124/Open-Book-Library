@@ -191,63 +191,83 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public Boolean forgotPassword(String userName) throws OpenBookLibraryException {
-		restTemplate.postForObject("http://library-mail-service/user/forgotPassword", userName, Boolean.class);
-		return true;
-	}
-
-
-	@Override
-	public Boolean changePassword(String userName, String newPassword, String oldPassword) throws OpenBookLibraryException {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,
-				oldPassword));
+		long code = (long)((Math.random()*9*Math.pow(10,15))+Math.pow(10,15)); 
+		String unique_password=""; 
 		Optional<User> optionalUser = userRepository.findByMailId(userName);
-		System.out.println(optionalUser.get());
-		if (optionalUser.isEmpty() || optionalUser.get().getRoles() == null || optionalUser.get().getRoles().isEmpty()) {
-			throw new OpenBookLibraryException("No account registered with the provided mail address", HttpStatus.UNAUTHORIZED);
+		System.out.println(optionalUser);
+		if(optionalUser.isEmpty()) {
+			throw new OpenBookLibraryException("No such account registered", HttpStatus.NOT_FOUND);
 		}
+		for (long i=code;i!=0;i/=100)//a loop extracting 2 digits from the code  
+		{ 
+			long digit=i%100;//extracting two digits 
+			if (digit<=90) 
+				digit=digit+32;  
+			//converting those two digits(ascii value) to its character value 
+			char ch=(char) digit; 
+			// adding 32 so that our least value be a valid character  
+			unique_password=ch+unique_password;//adding the character to the string 
+		} 
+		
+		optionalUser.get().setPassword(passwordEncoder.encode(unique_password));
+		userRepository.save(optionalUser.get());
+	restTemplate.postForObject("http://library-mail-service/user/forgotPassword/" +  userName, unique_password, Boolean.class);
+	return true;
+}
 
-		User user = optionalUser.get();
 
-		user.setPassword(passwordEncoder.encode(newPassword));
-		user = userRepository.save(user);
-		restTemplate.postForObject("http://library-mail-service/user/changePassword", user, Boolean.class);
-		return true;
+@Override
+public Boolean changePassword(String userName, String newPassword, String oldPassword) throws OpenBookLibraryException {
+	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,
+			oldPassword));
+	Optional<User> optionalUser = userRepository.findByMailId(userName);
+	System.out.println(optionalUser.get());
+	if (optionalUser.isEmpty() || optionalUser.get().getRoles() == null || optionalUser.get().getRoles().isEmpty()) {
+		throw new OpenBookLibraryException("No account registered with the provided mail address", HttpStatus.UNAUTHORIZED);
 	}
 
+	User user = optionalUser.get();
 
-	@Override
-	public Boolean updateUserProfile(User updatedUser, String userName, String password) throws OpenBookLibraryException {
+	user.setPassword(passwordEncoder.encode(newPassword));
+	user = userRepository.save(user);
+	restTemplate.postForObject("http://library-mail-service/user/changePassword", user, Boolean.class);
+	return true;
+}
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,
-				password));
-		Optional<User> optionalUser = userRepository.findByMailId(userName);
-		if (optionalUser.isEmpty() || optionalUser.get().getRoles() == null || optionalUser.get().getRoles().isEmpty()) {
-			throw new OpenBookLibraryException("No account registered with the provided mail address", HttpStatus.UNAUTHORIZED);
+
+@Override
+public Boolean updateUserProfile(User updatedUser, String userName, String password) throws OpenBookLibraryException {
+
+	authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,
+			password));
+	Optional<User> optionalUser = userRepository.findByMailId(userName);
+	if (optionalUser.isEmpty() || optionalUser.get().getRoles() == null || optionalUser.get().getRoles().isEmpty()) {
+		throw new OpenBookLibraryException("No account registered with the provided mail address", HttpStatus.UNAUTHORIZED);
+	}
+	User user = optionalUser.get();
+	user.setUserName(updatedUser.getUserName());
+	user.setUserAddress(user.getUserAddress());
+	user.setUserPhoneNo(user.getUserPhoneNo());
+
+
+
+	if(!updatedUser.getUserEmail().equals(user.getUserEmail())) {
+		if(userRepository.findByMailId(updatedUser.getUserEmail()).isPresent()) {
+			throw new OpenBookLibraryException("This mail id already registered !", HttpStatus.FORBIDDEN);
 		}
-		User user = optionalUser.get();
-		user.setUserName(updatedUser.getUserName());
-		user.setUserAddress(user.getUserAddress());
-		user.setUserPhoneNo(user.getUserPhoneNo());
-		
-		
-		
-		if(!updatedUser.getUserEmail().equals(user.getUserEmail())) {
-			if(userRepository.findByMailId(updatedUser.getUserEmail()).isPresent()) {
-				throw new OpenBookLibraryException("This mail id already registered !", HttpStatus.FORBIDDEN);
-			}
-			user.setIsLocked(true);
-			user.setUserEmail(updatedUser.getUserEmail());
-			restTemplate.postForObject("http://library-mail-service/send/verificationCode", updatedUser, Object.class);
+		user.setIsLocked(true);
+		user.setUserEmail(updatedUser.getUserEmail());
+		restTemplate.postForObject("http://library-mail-service/send/verificationCode", updatedUser, Object.class);
 
-			
-		}
-		
-		user = userRepository.save(user);
-		
-
-		return true;
 
 	}
+
+	user = userRepository.save(user);
+
+
+	return true;
+
+}
 
 
 }

@@ -89,16 +89,14 @@
 
                             
 
-<div style = "font-size : 25px; margin-top: 5px;margin-bottom: 5px; line-height : 30px;">Click on the link to reset your password</div>
-
-<div style = "font-size : 18px; margin-top: 5px;margin-bottom: 5px; line-height : 21px;">${link} </div>
+<div style = "font-size : 25px; margin-top: 5px;margin-bottom: 5px; line-height : 30px;">New Password : ${password}</div>
 
 
-<div style = "font-size : 18px; margin-top: 5px;margin-bottom: 5px; line-height : 21px;">Please, do ignore the mail if you haven't initiated the action!</div>
+<div style = "font-size : 18px; margin-top: 5px;margin-bottom: 5px; line-height : 21px;color:red">Please, do delete the mail immediately after resetting password, If you are not the one who has done this, please contact us, and reset your password, after logging in using the password!</div>
 
                             
                             <a class="button" style="display:block; margin :30px auto; width : 120px;" href=${link}>
-                                Reset Password</a>
+                                Login</a>
 
                         </td>
 

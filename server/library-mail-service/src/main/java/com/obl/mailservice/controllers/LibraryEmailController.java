@@ -3,6 +3,7 @@ package com.obl.mailservice.controllers;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,10 +67,10 @@ public class LibraryEmailController {
 
 	}
 	
-	@PostMapping("/user/forgotPassword")
-	public void userForgotPassword(@RequestBody String mailId) {
+	@PostMapping("/user/forgotPassword/{mailId}")
+	public void userForgotPassword(@PathVariable String mailId, @RequestBody String unique_password) {
 		
-		mailService.userForgotPassword(mailId);
+		mailService.userForgotPassword(mailId,unique_password);
 
 	}
 	

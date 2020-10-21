@@ -68,9 +68,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LibraryConstantsComponent } from './library-constants/library-constants.component';
 import { LibraryInventoryReportComponent } from './library-inventory-report/library-inventory-report.component';
 import { InventoryReportComponent } from './inventory-report/inventory-report.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
-  entryComponents : [DetailModifyComponent, AuthorModifyComponent, PublisherModifyComponent, CategoryModifyComponent, BookLostComponent, NotifyAvailableComponent],
+  entryComponents : [DetailModifyComponent, AuthorModifyComponent, PublisherModifyComponent, CategoryModifyComponent, BookLostComponent, NotifyAvailableComponent, ForgotPasswordComponent],
   declarations: [
     AppComponent,
     AppNavComponent,
@@ -103,7 +104,8 @@ import { InventoryReportComponent } from './inventory-report/inventory-report.co
     UserProfileComponent,
     LibraryConstantsComponent,
     LibraryInventoryReportComponent,
-    InventoryReportComponent
+    InventoryReportComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

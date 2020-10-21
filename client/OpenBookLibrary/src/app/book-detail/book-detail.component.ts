@@ -33,7 +33,7 @@ export class BookDetailComponent implements OnInit {
 
   customOptions: OwlOptions = {
     navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
-    loop: true,
+    loop : true,
     autoplay: true,
     center: true,
     dots: true,
@@ -43,7 +43,23 @@ export class BookDetailComponent implements OnInit {
     
   }
 
-  constructor(private bookService: LibraryBookService, private authService: LibraryAuthService, private datePipe : DatePipe, private route : ActivatedRoute, private _snackBar: MatSnackBar, private router : Router) { }
+  customOptions2: OwlOptions = {
+    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+    loop : false,
+    autoplay: true,
+    center: false,
+    dots: true,
+    nav : true,
+    autoHeight: true,
+    autoWidth: true,
+    
+  }
+
+  constructor(private bookService: LibraryBookService, private authService: LibraryAuthService, private datePipe : DatePipe, private route : ActivatedRoute, private _snackBar: MatSnackBar, private router : Router) { 
+    route.params.subscribe(params => {
+      this.getBook(params['id']);
+    })
+  }
 
   ngOnInit() {
     this.loggedInUserId = this.authService.getAuthResponse().loggedInUserId
@@ -54,6 +70,9 @@ export class BookDetailComponent implements OnInit {
   }
 
   getBook(bookId : number ) {
+    
+    this.dataLoaded = false
+
     this.bookService.getBookById(bookId).subscribe((book) => {
       this.book = book;
       this.getBooksOfAuthor()
@@ -158,7 +177,7 @@ export class BookDetailComponent implements OnInit {
   </span>`,
   styles: [`
     .notify-available {
-      color: hotpink;
+      color: white;
     }
   `],
 })

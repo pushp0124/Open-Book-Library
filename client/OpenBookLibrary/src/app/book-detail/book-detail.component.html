@@ -40,26 +40,37 @@
 
 </div>
 
-
 <div class="container" *ngIf="dataLoaded && authorBooks.length > 0">
-    More From Author :
-    <owl-carousel-o [options]="customOptions">
+        <div class="row justify-content-between">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <h4 style="text-align: left"> More From Author :</h4>
+                </div>
+                
+            </div>
+        
 
+    <owl-carousel-o [options]="customOptions2">
         <ng-container *ngFor="let book of authorBooks">
-            <ng-template class="slide" carouselSlide [id]="book.id">
+           
+            <ng-template carouselSlide [id]="book.id" class="slide">
 
-                <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 180px;">
-                <p class="wrap-book-title">
-                    {{book.bookTitle}}
+                <mat-card style="max-width : 220px; height : 350px">
+                    <mat-card-content>
+                        <img [src]="book.bookImages[0]" alt="Book Image(s)" style="max-width: 100% ;height : 250px;">
+                        <p class="wrap-book-title">
+                            {{book.bookTitle}}
 
-                </p>
-                <button mat-raised-button color="accent" class="book-button" (click)="viewBookDetail(book.bookId)"><span
-                        class="book-button">View Book Detail</span></button>
-
+                        </p>
+                        <button mat-raised-button color="accent" class="book-button"
+                            (click)="viewBookDetail(book.bookId)"><span class="book-button">View Book
+                                Detail</span></button>
+                    </mat-card-content>
+                </mat-card>
             </ng-template>
         </ng-container>
 
     </owl-carousel-o>
+
 </div>
 
 <div class="container" *ngIf="dataLoaded && categoryBooksDto.books.length > 0">
@@ -98,11 +109,5 @@
         </ng-container>
 
     </owl-carousel-o>
-
-
-
-
-
-
 
 </div>

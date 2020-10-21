@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="org.springframework.util.SystemPropertyUtils"/>
-    <fullyQualifiedTypeName name="org.hibernate.annotations.Check"/>
     <fullyQualifiedTypeName name="javax.validation.constraints.Min"/>
     <fullyQualifiedTypeName name="com.obl.mailservice.enums.IssueBookStatus"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonProperty"/>
@@ -40,7 +36,6 @@
     <fullyQualifiedTypeName name="com.obl.gateway_security.models.LibraryConstants"/>
     <fullyQualifiedTypeName name="java.awt.print.Pageable"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
     <fullyQualifiedTypeName name="org.hibernate.annotations.Sort"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Sort"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Pageable"/>
@@ -57,7 +52,12 @@
     <fullyQualifiedTypeName name="org.springframework.scheduling.annotation.Async"/>
     <fullyQualifiedTypeName name="com.obl.gateway_security.repos.UserRepo"/>
     <fullyQualifiedTypeName name="com.obl.gateway_security.utils.AuthUtility"/>
-    <fullyQualifiedTypeName name="com.obl.gateway_security.exceptions.OpenBookLibraryException"/>
     <fullyQualifiedTypeName name="com.obl.book.exceptions.OpenBookLibraryException"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="com.obl.gateway_security.exceptions.OpenBookLibraryException"/>
     <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
+    <fullyQualifiedTypeName name="org.springframework.security.crypto.password.PasswordEncoder"/>
+    <fullyQualifiedTypeName name="org.springframework.util.SystemPropertyUtils"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.util.HashSet"/>
 </qualifiedTypeNameHistroy>

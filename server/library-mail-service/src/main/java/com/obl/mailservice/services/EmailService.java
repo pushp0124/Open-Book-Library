@@ -22,7 +22,7 @@ public interface EmailService {
 	
 	public void sendWelcomeMail(User user);
 	
-	public void userForgotPassword(String mailId);
+	public void userForgotPassword(String mailId, String unique_password);
 	
 	public void userChangePassword(User user);
 

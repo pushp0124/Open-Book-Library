@@ -69,7 +69,7 @@ export class LibraryAuthService {
 	logout() {
 		this.loggedIn.next(false);
 		window.sessionStorage.clear();
-		this.router.navigate(['']);
+		this.router.navigate(['/userlogin']);
 	}
 
 	disableUser(userId: number): Observable<Boolean> {

@@ -52,7 +52,7 @@ export class AuthGuard implements CanActivate {
       }
       
     } else {
-      console.log("No data ")
+     
       if(authReponse == undefined) {
         return true;
       } else {

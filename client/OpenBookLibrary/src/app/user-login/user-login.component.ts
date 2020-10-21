@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { LibraryAuthService } from '../auth-service';
 import { AuthRequest } from '../model/authRequest';
 import { User } from '../model/user';
+import { MatDialog } from '@angular/material';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-user-login',
@@ -21,7 +23,7 @@ export class UserLoginComponent implements OnInit {
 
   buttonTxt  = "Login"
   isLoggingIn  = false;
-  constructor( private authService: LibraryAuthService, private router: Router, private _formBuilder: FormBuilder) { }
+  constructor( private authService: LibraryAuthService, private router: Router, private _formBuilder: FormBuilder, private matDialog : MatDialog) { }
 
   ngOnInit() {
 
@@ -73,6 +75,9 @@ export class UserLoginComponent implements OnInit {
     return this.loginFormGroup.controls['passwordCtrl'];
   }
 
+  forgotPassword() {
+    let matDialogRef = this.matDialog.open(ForgotPasswordComponent);
+  }
   errorClosed() {
     this.errorMessage = undefined;
   }

@@ -301,7 +301,7 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	@Async
-	public void userForgotPassword(String mailId) {
+	public void userForgotPassword(String mailId, String unique_password) {
 		
 
 		MailResponse response = new MailResponse();
@@ -310,6 +310,7 @@ public class EmailServiceImpl implements EmailService {
 		Map<String, Object> passwordModel = new HashMap<>();
 		
 		String link = env.getProperty("frontend.url") + "/userlogin";
+		passwordModel.put("password", unique_password);
 		passwordModel.put("link", link);
 		
 		
